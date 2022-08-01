@@ -48,7 +48,7 @@ exports.postRegister = async (req, res) => {
     });
     // generating a verified Token
     // create the jsonwebtoken
-    const accessToken = jwt.sign(
+    const email_access_token = jwt.sign(
       {
         email: newUser.email,
         isVerifiead: newUser.isVerifiead,
@@ -57,7 +57,7 @@ exports.postRegister = async (req, res) => {
       { expiresIn: "2d" }
     );
     //   email verifid token is save is database:
-    newUser.emailVerifiedToken = accessToken;
+    newUser.emailVerifiedToken = email_access_token;
     // sending the responce message is suceed
     res.status(200).json({
       status: true,
@@ -86,12 +86,10 @@ exports.emailVerifications = (req, res) => {
       if (err) {
         return res.status(403).json({ message: "Incorrent or Expire Link" });
       }
-      //  crete the new req.user
-      //   req.user = user;
       // find the user if exist in the database is save id
       let newUser = await User.findOne({ email: query_email });
       // //   if verified_user
-      if (!newUser.email || newUser.email !== user.email) {
+      if (!newUser) {
         return res.status(400).json({
           status: false,
           message: "somethis goes wrong",

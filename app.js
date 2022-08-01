@@ -1,6 +1,6 @@
 const  express = require('express')
 const app = express()
-const mongoose = require('./connections/connect');
+require('./connections/connect');
 require('dotenv').config();
 const authUserRoutes = require('./routes/auth');
 const adminRoutes = require('./routes/admin');
