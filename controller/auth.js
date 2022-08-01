@@ -58,7 +58,7 @@ exports.postRegister = async (req, res) => {
     );
     //   email verifid token is save is database:
     newUser.emailVerifiedToken = accessToken;
-    // sending the responce message is succedes
+    // sending the responce message is suceed
     res.status(200).json({
       status: true,
       message: "verification mail is send",
