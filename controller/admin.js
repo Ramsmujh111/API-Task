@@ -142,7 +142,7 @@ exports.softDelete = async (req, res, next) => {
     if(!user){
       return res.status(400).json({
         status:false,
-        message:`this is user does not exist`
+        message:`user does not exist`
       })
     }
     // send the responce 
@@ -172,7 +172,7 @@ exports.reverUser = async (req, res, next) => {
     if(!user){
       return res.status(400).json({
         status:false,
-        message:`this is user does not exist`
+        message:`user does not exist`
       })
     }
     // send the responce 
