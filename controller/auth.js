@@ -18,7 +18,6 @@ exports.postRegister = async (req, res) => {
   try {
     const validation = await validationSchema.validateAsync(req.body);
     // if user doesExist
-    console.log(validation.email);
     const doesExits = await User.findOne({ email: validation.email });
     if (doesExits) {
       return res.status(400).json({
@@ -62,7 +61,7 @@ exports.postRegister = async (req, res) => {
     res.status(200).json({
       status: true,
       message: "verification mail is send",
-      verifications_token: accessToken,
+      verifications_token: email_access_token,
     });
   } catch (error) {
     console.log(error.message);
@@ -84,7 +83,10 @@ exports.emailVerifications = (req, res) => {
     jwt.verify(authHeader, process.env.JWT_SECRET_KEY, async (err, user) => {
       // if err return error
       if (err) {
-        return res.status(403).json({ message: "Incorrent or Expire Link" });
+        return res.status(403).json({
+          status:false,
+          message: "Incorrent or Expire Link" 
+        });
       }
       // find the user if exist in the database is save id
       let newUser = await User.findOne({ email: query_email });
@@ -157,6 +159,8 @@ exports.postLogin = async (req, res, next) => {
         );
         // save the token
         user.accessToken = accessToken;
+        // access token save in database
+        user.save();
         res.status(200).json({
           status: true,
           message:

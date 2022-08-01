@@ -6,11 +6,11 @@ const {verifyUsers,verifyTokenAndAdmin} = require('../middleware/verifications')
 
 // get all users -----------------------------------------------------------------------------------------
 
-routes.get('/allUser',verifyTokenAndAdmin,adminRoutes.getAllUser);
+routes.get('/all-user',verifyTokenAndAdmin,adminRoutes.getAllUser);
 
 // get verified youser -----------------------------------------------------------------------------------
 
-routes.get('/verified',verifyTokenAndAdmin,adminRoutes.getAllVerifiedUser);
+routes.get('/verified-user',verifyTokenAndAdmin,adminRoutes.getAllVerifiedUser);
 
 // update user and params id; ---------------------------------------------------------------------------
 
@@ -24,7 +24,13 @@ routes.post('/creat-user',verifyTokenAndAdmin,adminRoutes.createUser);
 
 routes.get('/getById/:id',verifyTokenAndAdmin,adminRoutes.getUserById);
 
+// put soft delte user in the database
+
+routes.put('/soft-delete',verifyTokenAndAdmin,adminRoutes.softDelete);
+
 // delete user by param id 
+
+routes.put('/revert-deleted-user:/id',verifyTokenAndAdmin,adminRoutes.reverUser);
 
 module.exports = routes;
 

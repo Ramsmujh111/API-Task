@@ -8,6 +8,7 @@ const validationSchema = Jio.object({
     email:Jio.string().email({minDomainSegments: 2 , tlds:{allow:['com','net','yehoo']}}),
     isAdmin:Jio.boolean().default(false),
     isVerifiead:Joi.boolean().default(false),
+    deletedAt:Joi.boolean().default(false),
 
 })
 module.exports = {
