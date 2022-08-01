@@ -229,7 +229,7 @@ exports.forgetPassword = async (req, res, next) => {
 
 exports.resetPassword = async (req, res, next) => {
   const resetLink = req.query.token;
-  const newPassword = req.body.newPassword;
+  const new_Password = req.body.newPassword;
   try {
     // decode the reset_password_key
     jwt.verify(resetLink, process.env.RESET_PASSWORD_KEY, async (err, user) => {
