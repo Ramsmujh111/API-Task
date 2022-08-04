@@ -4,6 +4,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const nodemailer = require("nodemailer");
 const sendgridTranspots = require("nodemailer-sendgrid-transport");
+const logger = require("../service/logger");
 
 const transport = nodemailer.createTransport(
   sendgridTranspots({
@@ -20,6 +21,7 @@ exports.postRegister = async (req, res) => {
     // if user doesExist
     const doesExits = await User.findOne({ email: validation.email });
     if (doesExits) {
+      logger.error(`Email id already exist`);
       return res.status(400).json({
         status: false,
         message: "Emai id already exist",
@@ -58,13 +60,14 @@ exports.postRegister = async (req, res) => {
     //   email verifid token is save is database:
     newUser.emailVerifiedToken = email_access_token;
     // sending the responce message is suceed
+    logger.info(`verifivations mail has been send`);
     res.status(200).json({
       status: true,
-      message: "verification mail is send",
+      message: "verification mail has been send",
       verifications_token: email_access_token,
     });
   } catch (error) {
-    console.log(error.message);
+    logger(err.message);
     res.status(400).json({
       status: false,
       message: error.message,
@@ -83,20 +86,23 @@ exports.emailVerifications = (req, res) => {
     jwt.verify(authHeader, process.env.JWT_SECRET_KEY, async (err, user) => {
       // if err return error
       if (err) {
+        logger.error(`Incorrect or Expire Link`);
         return res.status(403).json({
           status:false,
-          message: "Incorrent or Expire Link" 
+          message: "Incorrect or Expire Link" 
         });
       }
       // find the user if exist in the database is save id
       let newUser = await User.findOne({ email: query_email });
       // //   if verified_user
       if (!newUser) {
+        logger.error(`we can't find with this mail id`);
         return res.status(400).json({
           status: false,
           message: "somethis goes wrong",
         });
       } else if (newUser.isVerifiead) {
+        logger.info(`user already verifiead`);
         return res.status(409).json({
           status: false,
           message: "Already Exists",
@@ -118,7 +124,7 @@ exports.emailVerifications = (req, res) => {
         { expiresIn: "2d" }
       );
       user.login_access_key = login_access_key;
-
+      logger.info(`Verificatins Succucessfuly complete!. please login`);
       res.status(200).json({
         status: true,
         message: "Verificatins Succucessfuly complete!. please login",
@@ -126,6 +132,7 @@ exports.emailVerifications = (req, res) => {
       });
     });
   } else {
+    logger.error(`You are not authenticated user!`);
     res.status(401).json({ message: "You are not authenticated , user!" });
   }
 };
@@ -137,6 +144,8 @@ exports.postLogin = async (req, res, next) => {
     const user = await User.findOne({ email: email });
     // if user is not found
     if (!user) {
+      // log is user email does't match
+      logger.error(`email and password is not match`);
       res.status(401).json({
         message: "emai and password is not match",
       });
@@ -144,6 +153,9 @@ exports.postLogin = async (req, res, next) => {
       const isPasswordMatch = await bcrypt.compare(password, user.password);
       //if password is not found
       if (!isPasswordMatch) {
+        // log if user password does't match
+        logger.error(`email and password is not match`);
+
         res.status(404).json({
           message: "emai and password is not match",
         });
@@ -161,6 +173,7 @@ exports.postLogin = async (req, res, next) => {
         user.accessToken = accessToken;
         // access token save in database
         user.save();
+        logger.info(`user logging successfully`);
         res.status(200).json({
           status: true,
           message:
@@ -174,7 +187,8 @@ exports.postLogin = async (req, res, next) => {
       }
     }
   } catch (error) {
-    console.log(error.message);
+    // if some error occure log the error
+   logger.error(error.message)
     res.status(200).json({
       status: false,
       message: error.message,
@@ -191,6 +205,8 @@ exports.forgetPassword = async (req, res, next) => {
     let user = await User.findOne({ email: email });
     // if user is not exist
     if (!user) {
+      // log if user does't not exist
+      logger.error(`User with this mail does not exist`);
       return res.status(400).json({
         status: false,
         message: "User with this mail does not exist",
@@ -215,13 +231,14 @@ exports.forgetPassword = async (req, res, next) => {
     user.resetLink = accessToken;
     // save the user
     user.save();
+    logger.info(`email has been send kundly forget-password`);
     res.status(250).json({
       status: true,
       message: "email have been send kindly forget-password",
       resetLink: user.resetLink,
     });
   } catch (error) {
-    console.log(error.message);
+    logger.error(error.message);
     res.status(400).json({
       status: false,
       message: error.message,
@@ -239,6 +256,7 @@ exports.resetPassword = async (req, res, next) => {
     jwt.verify(resetLink, process.env.RESET_PASSWORD_KEY, async (err, user) => {
       // if something is error
       if (err) {
+        logger.error(err.message);
         return res.status(401).json({
           status: false,
           message: err.message,
@@ -248,6 +266,7 @@ exports.resetPassword = async (req, res, next) => {
       let save_user = await User.findOne({ resetLink: resetLink });
       // if not user
       if (!save_user) {
+        logger.error(`user with this token does't exist`);
         return res.status(400).json({
           status: false,
           message: "user with this token is not exist",
@@ -264,6 +283,7 @@ exports.resetPassword = async (req, res, next) => {
       save_user.resetLink = null;
       // save new password into databaes
       save_user.save();
+      logger.info(`password has been changed`);
       res.status(200).json({
         status: true,
         message: "password has been chenged ,",
@@ -272,7 +292,7 @@ exports.resetPassword = async (req, res, next) => {
       });
     });
   } catch (error) {
-    console.log(error.message);
+    logger.error(error.message);
     res.status(400).json({
       status: false,
       message: error.message,

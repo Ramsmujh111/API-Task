@@ -1,5 +1,6 @@
 const jwt = require("jsonwebtoken");
 const User = require('../models/user');
+const logger = require('../service/logger');
 
 //verify web token
 const verifyToken = (req, res, next) => {
@@ -11,6 +12,7 @@ const verifyToken = (req, res, next) => {
     jwt.verify(authHeader, process.env.JWT_SECRET_KEY, (err, user) => {
       // if err return error
       if (err) {
+        logger.error(`Token is not valid`);
         return res.status(403).json({ message: "Token is not valid" });
       }
       //  crete the new req.user
@@ -19,6 +21,7 @@ const verifyToken = (req, res, next) => {
       next();
     });
   } else {
+    logger.error(`you are not authorize user !`);
     res.status(401).json({ message: "You are not authenticated , user!" });
   }
 };
@@ -31,6 +34,7 @@ const verifyUsers =async (req, res, next) => {
     if (req.user.isVerifiead === user.isVerifiead) {
       next();
     } else {
+      logger.error(`Unauthorized`);
       res.status(401).json({
         status:false,
         message:'Unauthorized'
@@ -45,6 +49,7 @@ const verifyTokenAndAdmin = (req, res, next) => {
       if (req.user.isAdmin) {
         next();
       } else {
+        logger.error(`You are not allow to do that`);
         res.status(403).json({ message: "You are not allow to do that" });
       }
     });

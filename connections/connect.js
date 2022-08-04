@@ -1,13 +1,14 @@
 const mongoose = require('mongoose');
+const logger = require('../service/logger');
 require('dotenv').config();
 
 mongoose.connect(process.env.MONGODB_URI)
 .then(()=>{
-    console.log('Database is connected successfully.......');
+    logger.info(`Database is connected successfully.......`);
 })
 .catch(err =>{
-    console.log('databse is not connected');
-    console.log(err.message)
+    logger.error(`databse is not connected`);
+    logger.error(err.message);
 
 })
 module.exports = mongoose;
