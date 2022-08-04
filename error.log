@@ -1,2 +1,4 @@
 2022-08-04T05:12:12.398Z | [  [31merror[39m  ] | databse is not connected
 2022-08-04T05:12:12.399Z | [  [31merror[39m  ] | bad auth : Authentication failed.
+2022-08-04T06:27:29.083Z | [  [31merror[39m  ] | File does not exist. Check to make sure the file path to your csv is correct.
+2022-08-04T06:34:26.146Z | [  [31merror[39m  ] | Error page not found 404
