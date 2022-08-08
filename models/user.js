@@ -32,14 +32,13 @@ const userSchema = new Schema({
     type: Boolean,
     default: false,
   },
-  resetLink:{
-    type:String,
-    default:null,
+  resetLink: {
+    type: String,
+    default: null,
   },
-  deletedAt:{
-    type:Boolean,
-    default:false
+  deletedAt: {
+    type: Boolean,
+    default: false,
   },
-
 });
 module.exports = mongoose.model("User", userSchema);
