@@ -50,11 +50,12 @@ exports.csv_to_json = async (req, res) => {
 exports.json_to_csv = async (req, res) => {
   logger.info(`request of this URL method is ${req.method}`);
   const users = req.body;
-  if(Object.keys(users).length <= 0){
-    logger.error('user is the null value');
+  if (Object.keys(users).length <= 0) {
+    logger.error("user is the null value");
     return res.status(400).json({
-      message:'length should be grether than 0 || we does not accept null value'
-    })
+      message:
+        "length should be grether than 0 || we does not accept null value",
+    });
   }
 
   try {
@@ -64,16 +65,16 @@ exports.json_to_csv = async (req, res) => {
     // save the data file in the our locallly
     fs.writeFileSync("./json-cvs-file/dowloaded-resource.csv", csv, (err) => {
       if (err) {
-        logger.error(err.message)
+        logger.error(err.message);
         return res.status(400).json({
           message: err.message,
         });
       }
-      logger.info(`file is save`)
+      logger.info(`file is save`);
     });
     // we can send the attachment for dowloading resorce:
     //   res.attachement()
-    // res.downloade(file , 'csv file name it's optinal')
+    // res.downloade(file , 'csv file name it's ')
     logger.info(`file has been converted into excel`);
     res.status(200).send(csv);
   } catch (error) {

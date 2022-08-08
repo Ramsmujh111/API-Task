@@ -1,4 +1,19 @@
-2022-08-04T05:12:12.398Z | [  [31merror[39m  ] | databse is not connected
-2022-08-04T05:12:12.399Z | [  [31merror[39m  ] | bad auth : Authentication failed.
-2022-08-04T06:27:29.083Z | [  [31merror[39m  ] | File does not exist. Check to make sure the file path to your csv is correct.
-2022-08-04T06:34:26.146Z | [  [31merror[39m  ] | Error page not found 404
+2022-08-08T12:06:31.209Z | [  [31merror[39m  ] | You are not allow to do that
+2022-08-08T12:11:32.477Z | [  [31merror[39m  ] | Email id already exist
+2022-08-08T12:27:23.678Z | [  [31merror[39m  ] | Unexpected token u in JSON at position 0
+2022-08-08T12:54:57.552Z | [  [31merror[39m  ] | you are not authorize user !
+2022-08-08T12:54:58.844Z | [  [31merror[39m  ] | you are not authorize user !
+2022-08-08T13:02:32.593Z | [  [31merror[39m  ] | Plan executor error during findAndModify :: caused by :: E11000 duplicate key error collection: test.users index: userName_1 dup key: { userName: "ramsmujh" }
+2022-08-08T13:26:33.828Z | [  [31merror[39m  ] | Error page not found 404
+2022-08-08T13:27:36.834Z | [  [31merror[39m  ] | "isAdmin" must be a boolean
+2022-08-08T13:28:09.671Z | [  [31merror[39m  ] | "isVerified" is not allowed
+2022-08-08T13:42:26.836Z | [  [31merror[39m  ] | Cannot convert undefined or null to object
+2022-08-08T13:44:34.646Z | [  [31merror[39m  ] | Cannot convert undefined or null to object
+2022-08-08T13:56:20.317Z | [  [31merror[39m  ] | Invalid atomic update value for $set. Expected an object, received boolean
+2022-08-08T13:57:15.283Z | [  [31merror[39m  ] | Invalid atomic update value for $set. Expected an object, received boolean
+2022-08-08T13:57:20.041Z | [  [31merror[39m  ] | Invalid atomic update value for $set. Expected an object, received boolean
+2022-08-08T14:34:02.578Z | [  [31merror[39m  ] | databse is not connected
+2022-08-08T14:34:02.579Z | [  [31merror[39m  ] | querySrv ECONNREFUSED _mongodb._tcp.cluster0.orvm9.mongodb.net
+2022-08-08T14:44:44.285Z | [  [31merror[39m  ] | FieldPath field names may not start with '$'. Consider using $getField or $setField.
+2022-08-08T15:48:45.641Z | [  [31merror[39m  ] | Must have a string or function for $where
+2022-08-08T15:48:47.065Z | [  [31merror[39m  ] | Must have a string or function for $where

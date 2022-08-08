@@ -114,6 +114,7 @@ exports.createUser = async (req, res, next) => {
       isVerifiead: validation.isVerifiead,
     });
     // if user is store in database-------
+    logger.info(`user has been created`);
     newUser.save();
     res.status(200).json({
       status: true,
@@ -131,10 +132,16 @@ exports.createUser = async (req, res, next) => {
 
 // find by params id ------------------------------------
 exports.getUserById = async (req, res, next) => {
-  const paramId = req.params.name;
+  const paramId = req.params.id;
   try {
-    const user = await User.findOne({ _id: paramId }, { deletedAt: false });
-    logger.info(`user find seccessfully`);
+    const user = await User.findById(paramId, { deletedAt: false });
+    if (!user && Object.keys(user).length <= 0) {
+      return res.status(400).json({
+        status: false,
+        message: `user with this is not avalilble`,
+      });
+    }
+    logger.info(`user find sucessfully`);
     res.status(200).json({
       status: true,
       message: "user deatails is ",
@@ -156,7 +163,7 @@ exports.softDelete = async (req, res, next) => {
     //  find by id and update the status in the deleteAt  = false or true
     const user = await User.findByIdAndUpdate(
       paramId,
-      { $set: (deletedAt = true) },
+      { $set: { deletedAt: true } },
       { new: true }
     );
     if (!user) {
@@ -188,7 +195,7 @@ exports.revertUser = async (req, res, next) => {
     //  find by id and update the status in the deleteAt  = false or true
     const user = await User.findByIdAndUpdate(
       paramId,
-      { $set: (deletedAt = false) },
+      { $set: { deletedAt: false } },
       { new: true }
     );
     if (!user) {
@@ -201,7 +208,7 @@ exports.revertUser = async (req, res, next) => {
     // send the responce
     res.status(201).json({
       status: true,
-      message: "user is deleted",
+      message: "deleted user is revert",
       user,
     });
   } catch (err) {

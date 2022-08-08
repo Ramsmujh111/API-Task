@@ -61,13 +61,13 @@ exports.postRegister = async (req, res) => {
     newUser.emailVerifiedToken = email_access_token;
     // sending the responce message is suceed
     logger.info(`verifivations mail has been send`);
-    res.status(200).json({
+    res.status(201).json({
       status: true,
       message: "verification mail has been send",
       verifications_token: email_access_token,
     });
   } catch (error) {
-    logger(err.message);
+    logger.error(error.message);
     res.status(400).json({
       status: false,
       message: error.message,
@@ -88,8 +88,8 @@ exports.emailVerifications = (req, res) => {
       if (err) {
         logger.error(`Incorrect or Expire Link`);
         return res.status(403).json({
-          status:false,
-          message: "Incorrect or Expire Link" 
+          status: false,
+          message: "Incorrect or Expire Link",
         });
       }
       // find the user if exist in the database is save id
@@ -188,7 +188,7 @@ exports.postLogin = async (req, res, next) => {
     }
   } catch (error) {
     // if some error occure log the error
-   logger.error(error.message)
+    logger.error(error.message);
     res.status(200).json({
       status: false,
       message: error.message,
@@ -228,6 +228,7 @@ exports.forgetPassword = async (req, res, next) => {
       html: `<h1>please clink the this link forgot-password <a>${process.env.Client_host}/user/forgot-password/:${accessToken}"</a><h1>`,
     });
     // store the data is the resetLink in token
+    console.log(accessToken);
     user.resetLink = accessToken;
     // save the user
     user.save();
@@ -263,7 +264,7 @@ exports.resetPassword = async (req, res, next) => {
         });
       }
       // find the user here
-      let save_user = await User.findOne({ resetLink: resetLink });
+      let save_user = await User.findOne({ _id: user._id });
       // if not user
       if (!save_user) {
         logger.error(`user with this token does't exist`);
@@ -275,7 +276,7 @@ exports.resetPassword = async (req, res, next) => {
       // hasing the password and save
       // hashing the password:
       const salt = await bcrypt.genSalt(10);
-      const hasPassword = bcrypt.hashSync(newPassword, salt);
+      const hasPassword = bcrypt.hashSync(new_Password, salt);
       let old_password = save_user.password;
       //   update the password
       save_user.password = hasPassword;
@@ -287,7 +288,7 @@ exports.resetPassword = async (req, res, next) => {
       res.status(200).json({
         status: true,
         message: "password has been chenged ,",
-        newPassword,
+        new_Password,
         old_password,
       });
     });

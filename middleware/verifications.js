@@ -1,6 +1,6 @@
 const jwt = require("jsonwebtoken");
-const User = require('../models/user');
-const logger = require('../service/logger');
+const User = require("../models/user");
+const logger = require("../service/logger");
 
 //verify web token
 const verifyToken = (req, res, next) => {
@@ -18,6 +18,7 @@ const verifyToken = (req, res, next) => {
       //  crete the new req.user
       req.user = user;
       // console.log(req.user);
+      // console.log(req.user);
       next();
     });
   } else {
@@ -26,18 +27,18 @@ const verifyToken = (req, res, next) => {
   }
 };
 
-// verified User and authorize user is verified: 
-const verifyUsers =async (req, res, next) => {
-  verifyToken(req, res,async () => {
-    const user = await User.findOne({_id:req.user._id});
+// verified User and authorize user is verified:
+const verifyUsers = async (req, res, next) => {
+  verifyToken(req, res, async () => {
+    const user = await User.findOne({ _id: req.user._id });
     // console.log(user);
     if (req.user.isVerifiead === user.isVerifiead) {
       next();
     } else {
       logger.error(`Unauthorized`);
       res.status(401).json({
-        status:false,
-        message:'Unauthorized'
+        status: false,
+        message: "Unauthorized",
       });
     }
   });
@@ -45,18 +46,17 @@ const verifyUsers =async (req, res, next) => {
 
 // this token is authenticate the admin
 const verifyTokenAndAdmin = (req, res, next) => {
-    verifyToken(req, res, () => {
-      if (req.user.isAdmin) {
-        next();
-      } else {
-        logger.error(`You are not allow to do that`);
-        res.status(403).json({ message: "You are not allow to do that" });
-      }
-    });
-  };
+  verifyToken(req, res, () => {
+    if (req.user.isAdmin) {
+      next();
+    } else {
+      logger.error(`You are not allow to do that`);
+      res.status(403).json({ message: "You are not allow to do that" });
+    }
+  });
+};
 
 module.exports = {
   verifyUsers,
   verifyTokenAndAdmin,
 };
-
