@@ -363,3 +363,5 @@
 2022-08-09T20:35:55.832Z | [  [32minfo[39m  ] | Example app listening on port 8081!
 2022-08-09T20:37:12.292Z | [  [31merror[39m  ] | databse is not connected
 2022-08-09T20:37:12.294Z | [  [31merror[39m  ] | queryTxt ETIMEOUT cluster0.orvm9.mongodb.net
+2022-08-09T20:37:35.141Z | [  [32minfo[39m  ] | Example app listening on port 8081!
+2022-08-09T20:37:44.402Z | [  [32minfo[39m  ] | Database is connected successfully.......
