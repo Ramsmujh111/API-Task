@@ -41,6 +41,7 @@ const options = {
     "./routes/auth*.js",
     "./routes/admin*.js",
     "./routes/file_converter*.js",
+    "./routes/pagination*.js",
   ],
 };
 const openapiSpecification = swaggerjsdoc(options);

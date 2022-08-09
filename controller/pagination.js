@@ -16,7 +16,7 @@ exports.jsonPlaceHolder = (req, res, next) => {
   axios.get(`https://jsonplaceholder.typicode.com/posts`).then((responces) => {
     const data = JSON.parse(JSON.stringify(responces.data));
     const results = {};
-    // now we are creating a propery previes page
+    // now we are creating a new properity previouse page
     if (startIndex > 0) {
       results.previouse = {
         page: page - 1,
