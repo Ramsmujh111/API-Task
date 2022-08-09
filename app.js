@@ -7,6 +7,7 @@ const adminRoutes = require("./routes/admin");
 const error_404 = require("./routes/error-404");
 const logger = require("./service/logger");
 const fileRoutes = require("./routes/file_converter");
+const paginationRoutes = require('./routes/pagination');
 const swaggerjsdoc = require("swagger-jsdoc");
 const swagger_ui = require("swagger-ui-express");
 const port = process.env.PORT;
@@ -51,6 +52,8 @@ app.use("/api/user", authUserRoutes);
 app.use("/api/admin", adminRoutes);
 // file convert routes is here --------------
 app.use("/api", fileRoutes);
+// pagination routes
+app.use('/api',paginationRoutes);
 // error path when we enter any default endpoint
 app.use(error_404);
 

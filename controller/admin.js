@@ -27,7 +27,6 @@ exports.getAllUser = async (req, res, next) => {
 // get all verified users -------------------------------------------------------------------------------
 exports.getAllVerifiedUser = async (req, res, next) => {
   const query = req.query.verified;
-  // console.log(typeof query);
   try {
     const user = await User.find(
       { isVerifiead: JSON.parse(query) },
@@ -134,7 +133,13 @@ exports.createUser = async (req, res, next) => {
 exports.getUserById = async (req, res, next) => {
   const paramId = req.params.id;
   try {
-    const user = await User.findById(paramId, { deletedAt: false });
+    const user = await User.findById(paramId);
+    if(user.deletedAt){
+       return res.status(203).json({
+        status:false,
+        message:`we did't find user with this id`
+       })
+    }
     if (!user && Object.keys(user).length <= 0) {
       return res.status(400).json({
         status: false,

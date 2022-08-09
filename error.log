@@ -1,18 +1,22 @@
-2022-08-08T12:06:31.209Z | [  [31merror[39m  ] | You are not allow to do that
-2022-08-08T12:11:32.477Z | [  [31merror[39m  ] | Email id already exist
-2022-08-08T12:27:23.678Z | [  [31merror[39m  ] | Unexpected token u in JSON at position 0
-2022-08-08T12:54:57.552Z | [  [31merror[39m  ] | you are not authorize user !
-2022-08-08T12:54:58.844Z | [  [31merror[39m  ] | you are not authorize user !
-2022-08-08T13:02:32.593Z | [  [31merror[39m  ] | Plan executor error during findAndModify :: caused by :: E11000 duplicate key error collection: test.users index: userName_1 dup key: { userName: "ramsmujh" }
-2022-08-08T13:26:33.828Z | [  [31merror[39m  ] | Error page not found 404
-2022-08-08T13:27:36.834Z | [  [31merror[39m  ] | "isAdmin" must be a boolean
-2022-08-08T13:28:09.671Z | [  [31merror[39m  ] | "isVerified" is not allowed
-2022-08-08T13:42:26.836Z | [  [31merror[39m  ] | Cannot convert undefined or null to object
-2022-08-08T13:44:34.646Z | [  [31merror[39m  ] | Cannot convert undefined or null to object
-2022-08-08T13:56:20.317Z | [  [31merror[39m  ] | Invalid atomic update value for $set. Expected an object, received boolean
-2022-08-08T13:57:15.283Z | [  [31merror[39m  ] | Invalid atomic update value for $set. Expected an object, received boolean
-2022-08-08T13:57:20.041Z | [  [31merror[39m  ] | Invalid atomic update value for $set. Expected an object, received boolean
-2022-08-08T14:34:02.578Z | [  [31merror[39m  ] | databse is not connected
-2022-08-08T14:34:02.579Z | [  [31merror[39m  ] | querySrv ECONNREFUSED _mongodb._tcp.cluster0.orvm9.mongodb.net
-2022-08-08T14:44:44.285Z | [  [31merror[39m  ] | FieldPath field names may not start with '$'. Consider using $getField or $setField.
-
+2022-08-09T08:01:15.345Z | [  [31merror[39m  ] | Converting circular structure to JSON
+    --> starting at object with constructor 'ClientRequest'
+    |     property 'socket' -> object with constructor 'TLSSocket'
+    --- property '_httpMessage' closes the circle
+2022-08-09T08:10:06.376Z | [  [31merror[39m  ] | Error page not found 404
+2022-08-09T08:10:18.507Z | [  [31merror[39m  ] | Error page not found 404
+2022-08-09T08:23:39.339Z | [  [31merror[39m  ] | Request failed with status code 404
+2022-08-09T08:24:19.143Z | [  [31merror[39m  ] | Request failed with status code 404
+2022-08-09T08:24:34.170Z | [  [31merror[39m  ] | Request failed with status code 404
+2022-08-09T08:24:36.154Z | [  [31merror[39m  ] | Request failed with status code 404
+2022-08-09T08:24:37.694Z | [  [31merror[39m  ] | Request failed with status code 404
+2022-08-09T08:24:39.311Z | [  [31merror[39m  ] | Request failed with status code 404
+2022-08-09T08:24:40.937Z | [  [31merror[39m  ] | Request failed with status code 404
+2022-08-09T08:25:31.325Z | [  [31merror[39m  ] | Request failed with status code 404
+2022-08-09T08:26:22.584Z | [  [31merror[39m  ] | Request failed with status code 404
+2022-08-09T08:26:42.275Z | [  [31merror[39m  ] | Request failed with status code 404
+2022-08-09T09:32:22.002Z | [  [31merror[39m  ] | databse is not connected
+2022-08-09T09:32:22.003Z | [  [31merror[39m  ] | querySrv ECONNREFUSED _mongodb._tcp.cluster0.orvm9.mongodb.net
+2022-08-09T09:47:21.384Z | [  [31merror[39m  ] | databse is not connected
+2022-08-09T09:47:21.385Z | [  [31merror[39m  ] | querySrv ECONNREFUSED _mongodb._tcp.cluster0.orvm9.mongodb.net
+2022-08-09T09:47:30.108Z | [  [31merror[39m  ] | databse is not connected
+2022-08-09T09:47:30.109Z | [  [31merror[39m  ] | querySrv ECONNREFUSED _mongodb._tcp.cluster0.orvm9.mongodb.net
