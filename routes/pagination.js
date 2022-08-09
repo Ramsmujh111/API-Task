@@ -68,7 +68,6 @@ const { pagination } = require(`../util/pagination`);
  *     
  * 
  */
-// console.log(paginationRoutes.jsonPlaceHolder);
 routes.get('/jsonplaceHolder' ,pagination(paginationRoutes.jsonPlaceHolder()), paginationRoutes.jsonPlaceHolder)
 
 /**
