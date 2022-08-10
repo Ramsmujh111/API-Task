@@ -1,5 +1,4 @@
 const logger = require("../service/logger");
-const sort = require("./order_and_sort");
 let pagination = (data) => {
   let newData = [];
   data
@@ -39,10 +38,20 @@ let pagination = (data) => {
           limit,
         };
       }
-      results.result = Object.entries(newData.results).slice(
-        startIndex,
-        endIndex
-      );
+      if (sortBy === "episode_id" && sortBy === "asc") {
+        results.result = Object.entries(newData.results)
+          .slice(startIndex, endIndex)
+          .sort((a, b) => a.episode_id - b.episode_id);
+      } else if (sortBy === "episode_id" && orderBy === "desc") {
+        results.result = Object.entries(newData.results)
+          .slice(startIndex, endIndex)
+          .sort((a, b) => b.episode_id - a.episode_id);
+      } else {
+        results.result = Object.entries(newData.results).slice(
+          startIndex,
+          endIndex
+        );
+      }
     }
     // else data work as simple there is nexted to inherit
     else {
@@ -52,12 +61,25 @@ let pagination = (data) => {
           limit,
         };
       }
-      results.result = Object.entries(newData).slice(startIndex, endIndex);
+      if (sortBy === "id" && sortBy === "asc") {
+        results.result = Object.entries(newData.results)
+          .slice(startIndex, endIndex)
+          .sort((a, b) => a.id - b.id);
+      } else if (sortBy === "id" && orderBy === "desc") {
+        results.result = Object.entries(newData.results)
+          .slice(startIndex, endIndex)
+          .sort((a, b) => b.id - a.id);
+      } else {
+        results.result = Object.entries(newData.results).slice(
+          startIndex,
+          endIndex
+        );
+      }
     }
     // if we want to perform the sorting action ............
-    res.status(200).json(results)
+    // sort by id
+    res.status(200).json(results);
     next();
-
   };
 };
 module.exports = {
