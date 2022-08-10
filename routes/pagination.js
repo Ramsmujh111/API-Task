@@ -28,6 +28,20 @@ const { pagination } = require(`../util/pagination`);
  *              type: integer
  *              required: true
  *              example: 1   
+ *          - in: query
+ *            name: sortBy
+ *            required: true
+ *            schema:
+ *              type: string
+ *              required: true
+ *              example: id_name   
+ *          - in: query
+ *            name: orderBy
+ *            required: true
+ *            schema:
+ *              type: string
+ *              required: true
+ *              example: desc/acs   
  * 
  *     responses:
  *        200: 
@@ -91,6 +105,16 @@ routes.get('/jsonplaceHolder' ,pagination(paginationRoutes.jsonPlaceHolder()), p
  *              type: integer
  *              required: true
  *              example: 1   
+ *          - in: query
+ *            name: sortBy
+ *            schema:
+ *              type: string
+ *              example: id-name-title   
+ *          - in: query
+ *            name: orderBy
+ *            schema:
+ *              type: string
+ *              example: asc/desc   
  * 
  *     responses:
  *        200: 

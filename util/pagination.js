@@ -1,6 +1,6 @@
 const logger = require("../service/logger");
 let pagination = (data) => {
-  let newData = [];
+  let newData;
   data
     .then((result) => {
       newData = result;
@@ -38,20 +38,38 @@ let pagination = (data) => {
           limit,
         };
       }
-      if (sortBy === "episode_id" && sortBy === "asc") {
-        results.result = Object.entries(newData.results)
-          .slice(startIndex, endIndex)
-          .sort((a, b) => a.episode_id - b.episode_id);
-      } else if (sortBy === "episode_id" && orderBy === "desc") {
-        results.result = Object.entries(newData.results)
-          .slice(startIndex, endIndex)
-          .sort((a, b) => b.episode_id - a.episode_id);
-      } else {
-        results.result = Object.entries(newData.results).slice(
-          startIndex,
-          endIndex
+      // sortby episode_id desc
+      if (sortBy === "episode_id" && orderBy === "desc") {
+        let sortedData = newData.results.sort((a, b) => {
+          return b.episode_id - a.episode_id;
+        });
+        // console.log(sortedData);
+        results.result = Object.entries(sortedData).slice(startIndex, endIndex);
+        // sort by episode_id asc
+      }else if (sortBy === "episode_id" && orderBy === "asc") {
+        let sortedData = newData.results.sort((a, b) => {
+          return a.episode_id - b.episode_id;
+        });
+        // console.log(sortedData);
+        results.result = Object.entries(sortedData).slice(startIndex, endIndex);
+        // sort by title acs
+      }else if (sortBy === "title" && orderBy === "acs") {
+        let sortedData = newData.results.sort((a, b) => {
+          return a.title > b.title ? 1 : b.title > a.title ? -1 : 0;
+        });
+        results.result = Object.entries(sortedData).slice(startIndex, endIndex);
+        // sort by title desc
+      } else if (sortBy === "title" && orderBy === "desc") {
+        let sortedData = newData.results.sort((a, b) =>
+          b.title > a.title ? 1 : a.title > b.title ? -1 : 0
         );
+        results.result = Object.entries(sortedData).slice(startIndex, endIndex);
       }
+      else{
+        results.result = Object.entries(newData.results).slice(startIndex, endIndex);
+
+      }
+      
     }
     // else data work as simple there is nexted to inherit
     else {
@@ -61,23 +79,29 @@ let pagination = (data) => {
           limit,
         };
       }
-      if (sortBy === "id" && sortBy === "asc") {
-        results.result = Object.entries(newData.results)
-          .slice(startIndex, endIndex)
-          .sort((a, b) => a.id - b.id);
-      } else if (sortBy === "id" && orderBy === "desc") {
-        results.result = Object.entries(newData.results)
-          .slice(startIndex, endIndex)
-          .sort((a, b) => b.id - a.id);
-      } else {
-        results.result = Object.entries(newData.results).slice(
-          startIndex,
-          endIndex
+      // sort by id ---------------------------------------
+      if (sortBy === "id" && orderBy === "desc") {
+        let sortedData = newData.sort((a, b) => {
+          return b.id - a.id;
+        });
+        // console.log(sortedData);
+        results.result = Object.entries(sortedData).slice(startIndex, endIndex);
+        // sort by title
+      } else if (sortBy === "title" && orderBy === "acs") {
+        let sortedData = newData.sort((a, b) => {
+          return a.title > b.title ? 1 : b.title > a.title ? -1 : 0;
+        });
+        results.result = Object.entries(sortedData).slice(startIndex, endIndex);
+        // sort by title desc
+      } else if (sortBy === "title" && orderBy === "desc") {
+        let sortedData = newData.sort((a, b) =>
+          b.title > a.title ? 1 : a.title > b.title ? -1 : 0
         );
+        results.result = Object.entries(sortedData).slice(startIndex, endIndex);
+      } else {
+        results.result = Object.entries(newData).slice(startIndex, endIndex);
       }
     }
-    // if we want to perform the sorting action ............
-    // sort by id
     res.status(200).json(results);
     next();
   };
