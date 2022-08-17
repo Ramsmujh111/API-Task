@@ -5,6 +5,12 @@ const {
   getsortingResult,
 } = require("../util/paginationResult");
 
+/**
+ * fetch data from the jsonplaceholder and return the response
+ * @param {*} req 
+ * @param {*} res 
+ * @returns {object} return fetch data
+ */
 exports.jsonPlaceHolder = async (req, res) => {
   try {
     const data = await axios.get(`https://jsonplaceholder.typicode.com/posts`);
@@ -23,7 +29,7 @@ exports.jsonPlaceHolder = async (req, res) => {
       );
      return res.status(200).json(paginated_data);
     }
-// if no sortby and order by queary parameter
+// if no sortby and order by asc/desc parameter
     const getpaginated_data = getPaginatedResult(
       parseData,
       parseInt(req.query.page),
@@ -38,9 +44,12 @@ exports.jsonPlaceHolder = async (req, res) => {
     })
   }
 };
-
-// ---------------------------------------------------------------------------
-
+/**
+ * fetch data from the jsonplaceholder and return the response
+ * @param {*} req 
+ * @param {*} res 
+ * @returns {object} return fetch data
+ */
 exports.swapi = async (req, res) => {
   try {
     const data = await axios.get(`https://swapi.dev/api/films`);
@@ -59,7 +68,7 @@ exports.swapi = async (req, res) => {
       );
      return res.status(200).json(paginated_data);
     }
-// if no sortby and order by queary parameter
+// if no sortby and order by query parameter
     const paginated_Data = getPaginatedResult(
       parseData,
       parseInt(req.query.page),
