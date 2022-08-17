@@ -30,8 +30,8 @@ const getsortingResult = (data, sortBy, orderBy) => {
     return data.sort((a, b) => {
       return a.episode_id - b.episode_id;
     });
-    // sort by title acs
-  } else if (sortBy === "title" && orderBy === "acs") {
+    // sort by title asc
+  } else if (sortBy === "title" && orderBy === "asc") {
     return data.sort((a, b) => {
       return a.title > b.title ? 1 : b.title > a.title ? -1 : 0;
     });
