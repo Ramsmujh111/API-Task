@@ -10,7 +10,7 @@ const {
 
 routes.get("/all-user", verifyTokenAndAdmin, adminRoutes.getAllUser);
 
-// get verified youser -----------------------------------------------------------------------------------
+// get verified users -----------------------------------------------------------------------------------
 routes.get(
   "/verified-user",
   verifyTokenAndAdmin,
@@ -27,7 +27,7 @@ routes.post("/create-user", verifyTokenAndAdmin, adminRoutes.createUser);
 
 routes.get("/getById/:id", verifyTokenAndAdmin, adminRoutes.getUserById);
 
-// put soft delte user in the database
+// put soft delete user in the database
 
 routes.put("/soft-delete/:id", verifyTokenAndAdmin, adminRoutes.softDelete);
 

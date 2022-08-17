@@ -54,7 +54,7 @@ exports.postRegister = async (req, res) => {
              <a href="http://${process.env.CLIENT_HOTS}/api/user/verifie-email?email=${newUser.email}">click to verifiy Email</a>  
       `,
     };
-    // sending the responce message is suceed
+    // sending the response message is succeed
     mailTransporter.sendMail(details, (err) => {
       if (err) {
         logger.error(err.message);

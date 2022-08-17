@@ -11,8 +11,6 @@ exports.csv_to_json = async (req, res) => {
     csvtojson()
       .fromFile(csvfilepath)
       .then((users) => {
-        // user in a json array
-        // log the json array
         // store data in the json file and folder and we also store the data in case
         fs.writeFileSync(
           "./json/users.json",
