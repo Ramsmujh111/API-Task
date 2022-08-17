@@ -4,6 +4,12 @@ const fs = require("fs");
 const logger = require("../config/winston");
 const csvfilepath = "./upload-file/user.csv";
 
+/**
+ * csv file to convert json file
+ * @param {*} req 
+ * @param {*} res 
+ * @returns {excel} return excel data 
+ */
 exports.csv_to_json = async (req, res) => {
   // log the input of the hitting urls logs
   logger.info(`request of this URL method is ${req.method}`);
@@ -41,8 +47,12 @@ exports.csv_to_json = async (req, res) => {
     });
   }
 };
-// convert the json-to-csv file
-
+/**
+ * convert the json-to-csv file
+ * @param {*} req 
+ * @param {*} res 
+ * @returns {object} convert csv to json and return json data
+ */
 exports.json_to_csv = async (req, res) => {
   logger.info(`request of this URL method is ${req.method}`);
   const users = req.body;
@@ -50,7 +60,7 @@ exports.json_to_csv = async (req, res) => {
     logger.error("user is the null value");
     return res.status(400).json({
       message:
-        "length should be grether than 0 || we does not accept null value",
+        "length should be greater than 0 || we does not accept null value",
     });
   }
 
@@ -58,8 +68,8 @@ exports.json_to_csv = async (req, res) => {
     const json2csvParser = new Parser();
     const csv = json2csvParser.parse(users);
 
-    // save the data file in the our locallly
-    fs.writeFileSync("./json-cvs-file/dowloaded-resource.csv", csv, (err) => {
+    // save the data file in the our locally
+    fs.writeFileSync("./json-cvs-file/downloaded-resource.csv", csv, (err) => {
       if (err) {
         logger.error(err.message);
         return res.status(400).json({
@@ -68,9 +78,9 @@ exports.json_to_csv = async (req, res) => {
       }
       logger.info(`file is save`);
     });
-    // we can send the attachment for dowloading resorce:
-    // res.attachement()
-    // res.downloade(file , 'csv file name it's ')
+    // we can send the attachment for downloading resource:
+    // res.attachment()
+    // res.download(file , 'csv file name it's ')
     logger.info(`file has been converted into excel`);
     res.status(200).send(csv);
   } catch (error) {
