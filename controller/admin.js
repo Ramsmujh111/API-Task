@@ -22,7 +22,7 @@ let mailTransporter = nodemailer.createTransport({
 
 
 /**
- * get all user one user by name and get all user
+ * @description get method for fetch all user
  * @param {*} req 
  * @param {*} res 
  * @param {string} name of the user 
@@ -50,7 +50,7 @@ exports.getAllUser = async (req, res) => {
 };
 
 /**
- * get all verified users 
+ * @description get method for fetch all verified users 
  * @param {*} req 
  * @param {*} res 
  * @param {boolean} find verified user in data
@@ -86,7 +86,7 @@ exports.getAllVerifiedUser = async (req, res) => {
 };
 
 /**
- * update user 
+ * @description put method update the particular user
  * @param {*} req 
  * @param {*} res 
  * @param {string} id find user by id and update
@@ -117,7 +117,7 @@ exports.updateUser = async (req, res) => {
   }
 };
 /**
- * create user by admin
+ * @description post method for create user by admin
  * @param {*} req 
  * @param {*} res 
  * @param {string} user name
@@ -195,7 +195,7 @@ exports.createUser = async (req, res) => {
 };
 
 /**
- * find user by id
+ * @description get method for get user by id 
  * @param {*} req 
  * @param {*} res 
  * @param {string} id user id 
@@ -233,7 +233,7 @@ exports.getUserById = async (req, res) => {
 };
 
 /**
- * soft delete find by params id and update
+ * @description put method for soft delete user
  * @param {*} req 
  * @param {*} res 
  * @param {string} id find by user id and update as deletedAt
@@ -271,7 +271,7 @@ exports.softDelete = async (req, res) => {
   }
 };
 /**
- *  revert soft deleted user
+ * @description put method for revert soft deleted user
  * @param {*} req 
  * @param {*} res 
  * @param {string} id soft deleted user id
