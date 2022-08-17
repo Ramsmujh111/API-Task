@@ -7,7 +7,7 @@ const verifyToken = (req, res, next) => {
   // access token from the header
   const authHeader = req.headers["x-access-token"];
   if (authHeader) {
-    // access the token from bearar
+    // access the token from bearer
     jwt.verify(authHeader, process.env.JWT_SECRET_KEY, (err, user) => {
       // if err return error
       if (err) {
