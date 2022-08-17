@@ -7,7 +7,7 @@ mongoose.connect(process.env.MONGODB_URI)
     logger.info(`Database is connected successfully.......`);
 })
 .catch(err =>{
-    logger.error(`databse is not connected`);
+    logger.error(`database is not connected`);
     logger.error(err.message);
 
 })
