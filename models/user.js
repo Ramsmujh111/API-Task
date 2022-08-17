@@ -24,10 +24,6 @@ const userSchema = new Schema({
     type: String,
     default: null,
   },
-  emailVerifiedToken: {
-    type: String,
-    default: null,
-  },
   isVerifiead: {
     type: Boolean,
     default: false,

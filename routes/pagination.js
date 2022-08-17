@@ -1,7 +1,6 @@
 const express = require("express");
 const routes = express.Router();
 const paginationRoutes = require(`../controller/pagination`);
-const { pagination } = require(`../util/pagination`);
 
 /**
  * pagination routes 
@@ -82,7 +81,7 @@ const { pagination } = require(`../util/pagination`);
  *     
  * 
  */
-routes.get('/jsonplaceHolder' ,pagination(paginationRoutes.jsonPlaceHolder()), paginationRoutes.jsonPlaceHolder)
+routes.get('/jsonplaceHolder' , paginationRoutes.jsonPlaceHolder)
 
 /**
  * @swagger
@@ -156,6 +155,6 @@ routes.get('/jsonplaceHolder' ,pagination(paginationRoutes.jsonPlaceHolder()), p
  * 
  */
 
-routes.get('/swapi',pagination(paginationRoutes.swapi()),paginationRoutes.swapi);
+routes.get('/swapi',paginationRoutes.swapi);
 
 module.exports = routes;

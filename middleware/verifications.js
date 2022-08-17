@@ -1,12 +1,11 @@
 const jwt = require("jsonwebtoken");
 const User = require("../models/user");
-const logger = require("../service/logger");
+const logger = require("../config/winston");
 
 //verify web token
 const verifyToken = (req, res, next) => {
   // access token from the header
   const authHeader = req.headers["x-access-token"];
-  // console.log(authHeader);
   if (authHeader) {
     // access the token from bearar
     jwt.verify(authHeader, process.env.JWT_SECRET_KEY, (err, user) => {
@@ -17,8 +16,6 @@ const verifyToken = (req, res, next) => {
       }
       //  crete the new req.user
       req.user = user;
-      // console.log(req.user);
-      // console.log(req.user);
       next();
     });
   } else {
@@ -31,7 +28,6 @@ const verifyToken = (req, res, next) => {
 const verifyUsers = async (req, res, next) => {
   verifyToken(req, res, async () => {
     const user = await User.findOne({ _id: req.user._id });
-    // console.log(user);
     if (req.user.isVerifiead === user.isVerifiead) {
       next();
     } else {

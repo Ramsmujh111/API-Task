@@ -1,0 +1,758 @@
+# for the api's documentaion
+openapi: 3.0.0
+# define the info about the 
+info:
+  title: Api's test for login and registration-form and also convert json file to csv 
+  description: Optional multiline or single-line description in [CommonMark](http://commonmark.org/help/) or HTML.
+  version: 1.0.0
+  contact:
+    email: xyz.devoloper.com
+  liscense:
+    name: Apache 2.0
+    url:  "http://localhost:8081"
+servers:
+  - url: http://localhost:8081
+# body schema that referce the register form
+
+components:
+  schemas:
+   userSchema:
+      type: object
+      properties:
+        userName:
+           type: string
+           required: true
+           description: name of user
+           example: ramsmujh
+        email:
+           type: string
+           required: true
+           description: email of user
+           example: xyz@gmail.com
+        password:
+           type: string
+           required: true
+           description: password of user
+           example: ramsmujh@123
+        confirm_password:
+           type: string
+           required: true
+           description: conform password of user of user
+           example: ramsmujh@123
+        isAdmin:
+           type: boolean
+           example: true / false
+        isVerified:
+           type: boolean
+           example: true / false
+  # user schema 
+   User:
+      type: object
+      properties:
+         _id:
+           type: string
+           example: 34kfjjmf48j_0kfj2
+         userName:
+           type: string
+           example: xyz_kumar
+         email:
+           type: string
+           example: google@gmail.com
+         isAdmin:
+           type: boolean
+           example: true/false
+         isVerified:
+           type: boolean
+           example: ture / false
+   # csv data Schema
+   fileData:
+        type: array
+        items:
+          name:
+             type: string
+             example: ramsmujh
+          country:
+             type: string
+             example: xyz@gmail.com
+          city:
+             type: string
+             example: Lucknow
+          addresh:
+             type: string
+             example: block-543 
+# registeration route api doc
+paths:
+ /api/user/register:
+   post:
+       summary: create the user
+       description: create the user
+       requestBody:
+         description: user data form from optional data
+         required: true
+         content:
+           application/json:
+             schema:
+                $ref: '#/components/schemas/userSchema'
+       responses:
+         201:
+           description: user created successfully
+           content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/userSchema'
+         400:
+           description: email id already exist
+           content:
+            text/html:
+              schema: 
+                type: string
+                items: 
+                  example: email id alredy exist
+                  
+         200:
+           description: user created successfully
+           content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/userSchema'
+         404:
+           description: page not found
+# email verification api's doc 
+ /api/user/verifie-email:
+     get:
+      summary: verifie the user mail
+      description: email verified through the query paramas
+      parameters:
+          - in: query
+            name: email
+            schema:
+              type: string
+            description: email id enter to verified the you mail
+           
+      responses:
+        200:
+         description: return a verification token to loggin
+         content:
+           application/json:
+             schema:
+               type: object
+               properties:
+                status:
+                 type: boolean
+                 example: true
+                message:
+                 type: string
+                 example: something
+                login_access_key:
+                 type: string
+                 example: jfnskdfkds          
+        403:
+         description: Forbidden
+         content:
+          application/json:
+            schema: 
+              type: string
+              properties:
+               message: 
+                type: string
+                example: Forbidden
+        400:
+         description: user can't find with this mail
+         content:
+           application/json:
+             schema:
+               type: object
+               properties:
+                status:
+                 type: boolean
+                 example: 'false'
+                message:
+                 type: string
+                 example: user can't find with this email
+        409:
+         description: user already exist!
+         content:
+           application/json:
+             schema:
+               type: object
+               properties:
+                status:
+                 type: boolean
+                 example: false
+                message:
+                 type: string
+                 example: user already exist!
+#login api docs
+ /api/user/login:
+      post:
+       summary: login a register user
+       description: request body to enter the email and password
+       requestBody:
+            description: email and password
+            required: true
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                   email:
+                      type: string
+                      required: true
+                      description: email of user
+                      example: xyz@gmail.com
+                   password:
+                      type: string
+                      required: true
+                      description: password of user
+                      example: ramsmujh@123
+       parameters:
+          - in: header
+            name: x-access-token
+            schema:
+              type: string
+            required: true
+  
+       responses:
+         200: 
+           description: success
+           content:
+            application/json:
+                schema:
+                  type: object
+                  properties:
+                   status:
+                      type: boolean
+                      example: true
+                   message:
+                      type: string
+                      example: user login successfully complete !
+                   profile:
+                      schema:
+                        $ref: '#/components/schemas/User'
+         401:
+           description: email id and password dos't match
+           content:
+            application/json:
+             schema:
+               type: object
+               properties:
+                status:
+                 type: boolean
+                 example: true / false
+                message:
+                 type: string
+                 example: email and password does't match
+# user forget-password_link
+ /api/user/forgot-password:
+      put:
+        summary: forgot password ganerate email link
+        description: forget mail genarate
+        requestBody:
+            description: email and password
+            required: true
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                   email:
+                      type: string
+                      required: true
+                      description: email of user
+                      example: xyz@gmail.com
+        parameters:
+          - in: header
+            name: x-access-token
+            schema:
+              type: string
+            required: true
+       
+        responses:
+         250: 
+           description: success
+           content:
+             application/json:
+                schema:
+                  type: object
+                  properties:
+                    status:
+                       type: boolean
+                       example: true
+                    message:
+                       type: string
+                       example: email have been send kindly forget-password !
+                    reset_token:
+                       type: string
+                       example: fkdlflkdnlsdfdnfkjdfgfdnkjf
+         400: 
+           description: success
+           content:
+             application/json:
+                schema:
+                  type: object
+                  properties:
+                    status:
+                       type: boolean
+                       example: false
+                    message:
+                       type: string
+                       example: user is not match   
+# reset-password with the access token
+ /api/user/reset-password:
+      put:
+        summary: reset password 
+        description: click the link and reset password
+        requestBody:
+            description: email and password
+            required: true
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                   newPassword:
+                      type: string
+                      required: true
+                      description: email of user
+                      example: xyz@gmail.com
+        parameters:
+           - in: header
+             name: x-access-token
+             schema:
+               type: string
+             required: true
+           - in: query
+             name: token
+             schema:
+               type: string
+             description: enter the queary token to reset the password
+                                                    
+        responses:
+         200: 
+           description: success
+           content:
+             application/json:
+                schema:
+                  type: object
+                  properties:
+                    status:
+                       type: boolean
+                       example: true
+                    message:
+                       type: string
+                       example: password has been chenged !
+                    new_password:
+                       type: string
+                       example: fkdlflkd*******jdfgfdnkjf
+                    old_password:
+                       type: string
+                       example: fkdlflk***********dfgfdnkjf
+         400: 
+           description: success
+           content:
+             application/json:
+                schema:
+                  type: object
+                  properties:
+                    status:
+                       type: boolean
+                       example: false
+                    message:
+                       type: string
+                       example: user is not match      
+# this is admin operation...............
+
+# get all user from the database
+ /api/admin/all-user:
+     get:
+       summary: get all user
+       description: get all user
+       parameters:
+         - in: header
+           name: x-access-token
+           schema:
+             type: string
+             required: true
+       responses:
+         200:
+           description: all user
+           content:
+             application/json:
+                schema:
+                  $ref: '#/components/schemas/User'         
+         400:
+           description: if data in not fetch from the data something is wrong
+           content:
+             application/json:
+                schema:
+                  type: object
+                  properties:
+                   status:
+                     type: boolean
+                     example: "false"
+                   message:
+                     type: string
+                     example: something is wrong
+ /api/admin/verified-user:
+      get:
+        summary: all verified user
+        description: find all verified user
+        parameters:
+          - in: header
+            name: x-access-token
+            schema:
+              type: string
+              required: true
+          - in: query
+            name: verified
+            schema:
+              type: boolean
+              required: true
+        responses:
+          200:
+            description: all user
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/User'
+          400:
+            description: Bad Request 
+# get all verified user
+ /api/admin/update/{id}:
+      put:
+       summary: find by id and update
+       description: user update by id 
+       requestBody:
+           description: update any field which you wanna
+           required: true
+           content:
+             application/json:
+                schema:
+                  $ref: '#/components/schemas/User'
+       parameters:
+          - in: path
+            name: id
+            required: true
+            schema:
+              type: string
+              required: true
+              example: expi948_3fdj_
+          - in: header
+            name: x-access-token
+            required: true
+            schema:
+             type: string
+             required: true                                                                    
+       responses:
+            200:
+               description: updated user fieald 
+               content:
+                 application/json:
+                    schema:
+                      $ref: '#/components/schemas/User'
+            400:
+               description: Bad Request 
+# create user by admin
+ /api/admin/create-user:
+      post:
+        summary: admin create user
+        description: admin create user
+        requestBody:
+            description: create user 
+            required: true
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/userSchema'
+        parameters:
+           - in: header
+             name: x-access-token
+             required: true
+             schema:
+              type: string
+              required: true 
+        responses:
+             200:
+               description: user created  
+               content:
+                 application/json:
+                    schema:
+                      $ref: '#/components/schemas/userSchema'
+             400:
+               description: Bad Request
+# user get by id admin
+ /api/admin/getById/{id}:
+    get:
+      summary: get user by id
+      description: get user by id
+      parameters:
+           - in: path
+             name: id
+             required: true
+             schema:
+               type: string
+               required: true
+               example: expi948_3fdj_
+           - in: header
+             name: x-access-token
+             required: true
+             schema:
+              type: string
+              required: true
+                                                                           
+      responses:
+             200:
+               description: find user by id
+               content:
+                 application/json:
+                    schema:
+                      $ref: '#/components/schemas/User'
+             400:
+               description: Bad Request 
+# soft-delete by admin
+ /api/admin/soft-delete/{id}:
+     put:
+      summary: sotf-delete
+      description: find by id and delete
+      parameters:
+           - in: path
+             name: id
+             required: true
+             schema:
+               type: string
+               required: true
+               example: expi948_3fdj_
+           - in: header
+             name: x-access-token
+             required: true
+             schema:
+              type: string
+              required: true
+                                                                           
+      responses:
+             200:
+               description: deleted user
+               content:
+                 application/json:
+                    schema:
+                      $ref: '#/components/schemas/User'
+             400:
+               description: Bad Request
+# revert-soft delete by admin
+ /api/admin/revert-deleted-user/{id}:
+     put:
+      summary: revert sotf-delete
+      description: find by id and revert delete user
+      parameters:
+           - in: path
+             name: id
+             required: true
+             schema:
+               type: string
+               required: true
+               example: expi948_3fdj_
+           - in: header
+             name: x-access-token
+             required: true
+             schema:
+              type: string
+              required: true
+                                                                           
+      responses:
+             200:
+               description: revert deleted user
+               content:
+                 application/json:
+                    schema:
+                      $ref: '#/components/schemas/User'
+             400:
+               description: Bad Request
+#  file convert csv file to json 
+ /api/csv-to-json:
+   get:
+     summary: Return a csv for to json data
+     description: this is the form-convert-json-to cvs form !
+     responses:
+       200:   #status code
+        description: cvs data to json form
+        content:
+          application/json:
+            schema:
+               $ref: '#/components/schemas/fileData'
+       400:
+        description: someting went wrong
+        content:
+          application/json:
+                schema:
+                  type: object
+                  properties:
+                   status:
+                     type: boolean
+                     example: "false"
+                   message:
+                     type: string
+                     example: something is wrong
+# file convert json to csv    
+ /api/json-to-csv:
+   post:
+      summary: return json data to cvs form data
+      description: convert json data to excel file
+      requestBody:
+    
+         description: json data enter in the body
+         required: true
+         content:
+           application/json:
+             schema:
+                $ref: '#/components/schema/fileData'
+  
+      responses:
+         200:
+           description: return a excel file 
+           content:
+             text/html:
+               schema:
+                 $ref: '#/componentes/schema/fileData'                   
+         400:
+           description: someting went wrong 
+           content:
+             text/html:
+               schema:
+                 $ref: '#/componentes/schema/fileData'
+# pagination jsonplaceHolder
+ /api/jsonplaceHolder:
+    get:
+     summary: set the pagination 
+     description: set the query as a page and limit
+     parameters:
+          - in: query
+            name: page
+            required: true
+            schema:
+              type: integer
+              required: true
+              example: 1   
+          - in: query
+            name: limit
+            required: true
+            schema:
+              type: integer
+              required: true
+              example: 1   
+          - in: query
+            name: sortBy
+            required: true
+            schema:
+              type: string
+              required: true
+              example: id_name   
+          - in: query
+            name: orderBy
+            required: true
+            schema:
+              type: string
+              required: true
+              example: desc/acs   
+ 
+     responses:
+        200: 
+          description: success
+          content:
+           application/json:
+               schema:
+                 type: object
+                 properties:
+                  previouse:
+                     type: object
+                     properties:
+                       page:
+                         type: interger
+                         example: 2
+                       limit: 
+                         type: interger
+                         example: 2
+                  next:
+                     type: object
+                     properties:
+                       page:
+                         type: interger
+                         example: 2
+                       limit: 
+                         type: interger
+                         example: 2
+                  data:
+                     type: array
+                     items:
+                       page:
+                         type: interger
+                         example: 2
+                       limit: 
+                         type: interger
+                         example: 2   
+# pagination swapi
+ /api/swapi:
+     get:
+      summary: set the pagination 
+      description: set the query as a page and limit
+      parameters:
+           - in: query
+             name: page
+             required: true
+             schema:
+               type: integer
+               required: true
+               example: 1   
+           - in: query
+             name: limit
+             required: true
+             schema:
+               type: integer
+               required: true
+               example: 1   
+           - in: query
+             name: sortBy
+             schema:
+               type: string
+               example: id-name-title   
+           - in: query
+             name: orderBy
+             schema:
+               type: string
+               example: asc/desc   
+  
+      responses:
+         200: 
+           description: success
+           content:
+            application/json:
+                schema:
+                  type: object
+                  properties:
+                   previouse:
+                      type: object
+                      properties:
+                        page:
+                          type: interger
+                          example: 2
+                        limit: 
+                          type: interger
+                          example: 2
+                   next:
+                      type: object
+                      properties:
+                        page:
+                          type: interger
+                          example: 2
+                        limit: 
+                          type: interger
+                          example: 2
+                   data:
+                      type: array
+                      items:
+                        page:
+                          type: interger
+                          example: 2
+                        limit: 
+                          type: interger
+                          example: 2                       
+  

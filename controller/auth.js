@@ -3,16 +3,20 @@ const { validationSchema } = require("../middleware/validations");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const nodemailer = require("nodemailer");
-const sendgridTranspots = require("nodemailer-sendgrid-transport");
-const logger = require("../service/logger");
+const logger = require("../config/winston");
 
-const transport = nodemailer.createTransport(
-  sendgridTranspots({
-    auth: {
-      api_key: process.env.sendgrid_API_key,
-    },
-  })
-);
+let mailTransporter = nodemailer.createTransport({
+  host: "smtp.gmail.com",
+  port: 587,
+  secure: false,
+  auth: {
+    user: process.env.EMAIL,
+    pass: process.env.PASSWORD,
+  },
+  tls: {
+    rejectUnauthorized: false,
+  },
+});
 
 // register page
 exports.postRegister = async (req, res) => {
@@ -41,30 +45,29 @@ exports.postRegister = async (req, res) => {
     // if user is store in database-------
     newUser.save();
     // send the email to user
-    transport.sendMail({
+    let details = {
+      from: `dev.bit.ram@gmail.com`,
       to: newUser.email,
-      from: "dev.bit.ram@gmail.com",
-      subject: "Verifications mail",
-      html: `<h1>please verified the mail using this link ${process.env.Client_host}/user/verify-email?email="${newUser.email}"<h1>`,
-    });
-    // generating a verified Token
-    // create the jsonwebtoken
-    const email_access_token = jwt.sign(
-      {
-        email: newUser.email,
-        isVerifiead: newUser.isVerifiead,
-      },
-      process.env.JWT_SECRET_KEY,
-      { expiresIn: "2d" }
-    );
-    //   email verifid token is save is database:
-    newUser.emailVerifiedToken = email_access_token;
+      subject: `register verification mail`,
+      html: `<h2>${newUser.userName}! Thanks for registering on our side</h2>
+             <h4> Please verified your mail to continue... </h4>
+             <a href="http://${process.env.CLIENT_HOTS}/api/user/verifie-email?email=${newUser.email}">click to verifiy Email</a>  
+      `,
+    };
     // sending the responce message is suceed
-    logger.info(`verifivations mail has been send`);
-    res.status(201).json({
-      status: true,
-      message: "verification mail has been send",
-      verifications_token: email_access_token,
+    mailTransporter.sendMail(details, (err) => {
+      if (err) {
+        logger.error(err.message);
+        return res.status(400).json({
+          status: false,
+          message: err.message,
+        });
+      }
+      logger.info(`verifications mail has been send`);
+      return res.status(201).json({
+        status: true,
+        message: "verification mail has been send",
+      });
     });
   } catch (error) {
     logger.error(error.message);
@@ -76,69 +79,54 @@ exports.postRegister = async (req, res) => {
 };
 
 // email verifications -------------------------------------------------------------------------------
-exports.emailVerifications = (req, res) => {
+exports.emailVerifications = async (req, res) => {
   //verify web token
-  const query_email = req.query.email;
-  // access token from the header
-  const authHeader = req.headers["x-access-token"];
-  if (authHeader) {
-    // access the token from bearar
-    jwt.verify(authHeader, process.env.JWT_SECRET_KEY, async (err, user) => {
-      // if err return error
-      if (err) {
-        logger.error(`Incorrect or Expire Link`);
-        return res.status(403).json({
-          status: false,
-          message: "Incorrect or Expire Link",
-        });
-      }
-      // find the user if exist in the database is save id
-      let newUser = await User.findOne({ email: query_email });
-      // //   if verified_user
-      if (!newUser) {
-        logger.error(`we can't find with this mail id`);
-        return res.status(400).json({
-          status: false,
-          message: "somethis goes wrong",
-        });
-      } else if (newUser.isVerifiead) {
-        logger.info(`user already verifiead`);
-        return res.status(409).json({
-          status: false,
-          message: "Already Exists",
-        });
-      }
-      // //  so we can set the verified user is the true here
-      // verified_user.isVerifiead = true;
-      newUser.isVerifiead = true;
-      newUser.emailVerifiedToken = null;
-      newUser.save();
-      user.isVerifiead = true;
-      // create the new login access key
-      const login_access_key = jwt.sign(
-        {
-          _id: newUser._id,
-          isVerifiead: newUser.isVerifiead,
-        },
-        process.env.JWT_SECRET_KEY,
-        { expiresIn: "2d" }
-      );
-      user.login_access_key = login_access_key;
-      logger.info(`Verificatins Succucessfuly complete!. please login`);
-      res.status(200).json({
-        status: true,
-        message: "Verificatins Succucessfuly complete!. please login",
-        data: user,
+  try {
+    const query_email = req.query.email;
+    let user = await User.findOne({ email: query_email });
+    // //   if verified_user
+    if (!user) {
+      logger.error(`we can't find with this mail id`);
+      return res.status(400).json({
+        status: false,
+        message: "somethis goes wrong",
       });
+    } else if (user.isVerifiead) {
+      logger.info(`user already verifiead`);
+      return res.status(409).json({
+        status: false,
+        message: "Already Exists",
+      });
+    }
+    user.isVerifiead = true;
+    user.save();
+    // create the new login access key
+    const login_access_key = jwt.sign(
+      {
+        _id: user._id,
+        isVerifiead: user.isVerifiead,
+      },
+      process.env.JWT_SECRET_KEY,
+      { expiresIn: "2d" }
+    );
+    user.login_access_key = login_access_key;
+    logger.info(`Verificatins Succucessfuly complete!. please login`);
+    res.status(200).json({
+      status: true,
+      message: "Verificatins Succucessfuly complete!. please login",
+      login_access_key: user.login_access_key,
     });
-  } else {
-    logger.error(`You are not authenticated user!`);
-    res.status(401).json({ message: "You are not authenticated , user!" });
+  } catch (error) {
+    logger.error(error.message);
+    res.status(400).json({
+      status: false,
+      message: error.message,
+    });
   }
 };
 
 // user login ----------------------------------------------------------------------------
-exports.postLogin = async (req, res, next) => {
+exports.postLogin = async (req, res) => {
   try {
     const { email, password } = req.body;
     const user = await User.findOne({ email: email });
@@ -198,7 +186,7 @@ exports.postLogin = async (req, res, next) => {
 
 // forget-passsword-------------------------------------------------------
 
-exports.forgetPassword = async (req, res, next) => {
+exports.forgetPassword = async (req, res) => {
   const { email } = req.body;
 
   try {
@@ -221,14 +209,24 @@ exports.forgetPassword = async (req, res, next) => {
       { expiresIn: "2h" }
     );
     // sending the mail to reset the password:
-    transport.sendMail({
+    let details = {
+      from: `dev.bit.ram@gmail.com`,
       to: user.email,
-      from: "dev.bit.ram@gmail.com",
-      subject: "forgot-password",
-      html: `<h1>please clink the this link forgot-password <a>${process.env.Client_host}/user/forgot-password/:${accessToken}"</a><h1>`,
-    });
+      subject: `forget password link`,
+      html: `<h2>${user.userName}! Please forget the password</h2>
+             <a href="http://${process.env.CLIENT_HOTS}/api/user/reset-password?token=${accessToken}">click to forget the password </a>  
+      `,
+    };
+    mailTransporter.sendMail(details, (err)=>{
+      if(err){
+        logger.error(err.message);
+       return res.status(400).json({
+          status: false,
+          message: err.message
+        })
+      }
+    })
     // store the data is the resetLink in token
-    console.log(accessToken);
     user.resetLink = accessToken;
     // save the user
     user.save();
@@ -249,7 +247,7 @@ exports.forgetPassword = async (req, res, next) => {
 
 // reset-password -------------------------------------------------------------------------
 
-exports.resetPassword = async (req, res, next) => {
+exports.resetPassword = async (req, res) => {
   const resetLink = req.query.token;
   const new_Password = req.body.newPassword;
   try {

@@ -1,10 +1,10 @@
 const User = require("../models/user");
 const { validationSchema } = require("../middleware/validations");
 const bcrypt = require("bcrypt");
-const logger = require(`../service/logger`);
+const logger = require(`../config/winston`);
 
 // get all user one user by name and get all user--------------------------------------------------------
-exports.getAllUser = async (req, res, next) => {
+exports.getAllUser = async (req, res) => {
   const query = req.query.name;
   try {
     const user = query
@@ -25,7 +25,7 @@ exports.getAllUser = async (req, res, next) => {
 };
 
 // get all verified users -------------------------------------------------------------------------------
-exports.getAllVerifiedUser = async (req, res, next) => {
+exports.getAllVerifiedUser = async (req, res) => {
   const query = req.query.verified;
   try {
     const user = await User.find(
@@ -55,8 +55,7 @@ exports.getAllVerifiedUser = async (req, res, next) => {
 };
 
 // update user --------------------------------------------
-exports.updateUser = async (req, res, next) => {
-  //   const { password } = req.body;
+exports.updateUser = async (req, res) => {
   try {
     const updatedUser = await User.findByIdAndUpdate(
       req.params.id,
@@ -81,7 +80,7 @@ exports.updateUser = async (req, res, next) => {
   }
 };
 // create user -----------------------------------------------------------------------------------------
-exports.createUser = async (req, res, next) => {
+exports.createUser = async (req, res) => {
   try {
     const validation = await validationSchema.validateAsync(req.body);
     // if user doesExist
@@ -130,7 +129,7 @@ exports.createUser = async (req, res, next) => {
 };
 
 // find by params id ------------------------------------
-exports.getUserById = async (req, res, next) => {
+exports.getUserById = async (req, res) => {
   const paramId = req.params.id;
   try {
     const user = await User.findById(paramId);
@@ -162,7 +161,7 @@ exports.getUserById = async (req, res, next) => {
 };
 
 // soft delete find by params id and update
-exports.softDelete = async (req, res, next) => {
+exports.softDelete = async (req, res) => {
   try {
     const paramId = req.params.id;
     //  find by id and update the status in the deleteAt  = false or true
@@ -194,7 +193,7 @@ exports.softDelete = async (req, res, next) => {
   }
 };
 // revert soft deleted user
-exports.revertUser = async (req, res, next) => {
+exports.revertUser = async (req, res) => {
   try {
     const paramId = req.params.id;
     //  find by id and update the status in the deleteAt  = false or true

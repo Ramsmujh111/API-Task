@@ -1,2 +1,3 @@
 node_modules
-order_and_sort.js
+.env
+log

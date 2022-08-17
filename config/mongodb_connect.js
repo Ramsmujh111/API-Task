@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const logger = require('../service/logger');
+const logger = require('./winston');
 require('dotenv').config();
 
 mongoose.connect(process.env.MONGODB_URI)

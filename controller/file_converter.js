@@ -1,11 +1,10 @@
 const csvtojson = require("csvtojson");
 const { Parser } = require("json2csv");
 const fs = require("fs");
-const logger = require("../service/logger");
+const logger = require("../config/winston");
 const csvfilepath = "./upload-file/user.csv";
 
 exports.csv_to_json = async (req, res) => {
-  // console.log(csvfilepath);
   // log the input of the hitting urls logs
   logger.info(`request of this URL method is ${req.method}`);
   try {
@@ -14,7 +13,6 @@ exports.csv_to_json = async (req, res) => {
       .then((users) => {
         // user in a json array
         // log the json array
-        // console.log(users);
         // store data in the json file and folder and we also store the data in case
         fs.writeFileSync(
           "./json/users.json",
@@ -73,7 +71,7 @@ exports.json_to_csv = async (req, res) => {
       logger.info(`file is save`);
     });
     // we can send the attachment for dowloading resorce:
-    //   res.attachement()
+    // res.attachement()
     // res.downloade(file , 'csv file name it's ')
     logger.info(`file has been converted into excel`);
     res.status(200).send(csv);

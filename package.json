@@ -4,8 +4,8 @@
   "description": "this is api task",
   "main": "index.js",
   "scripts": {
-    "start": "node app.js",
-    "run": "nodemon app.js"
+    "start-prod": "node app.js",
+    "run-dev": "nodemon app.js"
   },
   "repository": {
     "type": "git",
@@ -26,14 +26,15 @@
     "joi": "^17.6.0",
     "json2csv": "^5.0.7",
     "jsonwebtoken": "^8.5.1",
-    "mongoose": "^6.5.0",
     "nodemailer": "^6.7.7",
-    "nodemon": "^2.0.19",
     "swagger-jsdoc": "^6.2.3",
     "swagger-ui-express": "^4.5.0",
     "winston": "^3.8.1"
   },
   "devDependencies": {
-    "nodemailer-sendgrid-transport": "^0.2.0"
+    "mongoose": "^6.5.2",
+    "nodemailer-sendgrid-transport": "^0.2.0",
+    "nodemon": "^2.0.19",
+    "yamljs": "^0.3.0"
   }
 }
