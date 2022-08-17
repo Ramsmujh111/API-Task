@@ -118,7 +118,7 @@ paths:
          404:
            description: page not found
 # email verification api's doc 
- /api/user/verifie-email:
+ /api/user/verify-email:
      get:
       summary: verified the user mail
       description: email verified through the query params
@@ -229,7 +229,7 @@ paths:
                    profile:
                       schema:
                         $ref: '#/components/schemas/User'
-         401:
+         404:
            description: email id and password dos't match
            content:
             application/json:

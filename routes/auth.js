@@ -8,7 +8,7 @@ const { verifyUsers } = require("../middleware/verifications");
 routes.post("/register", authRoutes.postRegister);
 
 // get verifications routes ------------------------------
-routes.get("/verifie-email", authRoutes.emailVerifications);
+routes.get("/verify-email", authRoutes.emailVerifications);
 
 // post login -------------------------------------------
 

@@ -64,7 +64,7 @@ exports.postRegister = async (req, res) => {
       subject: `register verification mail`,
       html: `<h2>${newUser.userName}! Thanks for registering on our side</h2>
              <h4> Please verified your mail to continue... </h4>
-             <a href="http://${process.env.CLIENT_HOTS}/api/user/verifie-email?email=${newUser.email}">click to Verify Email</a>  
+             <a href="http://${process.env.CLIENT_HOST}/api/user/verify-email?email=${newUser.email}">click to Verify Email</a>  
       `,
     };
     // sending the response message is succeed
