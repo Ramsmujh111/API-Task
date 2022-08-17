@@ -1,4 +1,4 @@
-# for the api's documentaion
+# for the api's documentations
 openapi: 3.0.0
 # define the info about the 
 info:
@@ -6,13 +6,13 @@ info:
   description: Optional multiline or single-line description in [CommonMark](http://commonmark.org/help/) or HTML.
   version: 1.0.0
   contact:
-    email: xyz.devoloper.com
-  liscense:
+    email: xyz.developer.com
+  license:
     name: Apache 2.0
     url:  "http://localhost:8081"
 servers:
   - url: http://localhost:8081
-# body schema that referce the register form
+# body schema that reference the register form
 
 components:
   schemas:
@@ -63,7 +63,7 @@ components:
            example: true/false
          isVerified:
            type: boolean
-           example: ture / false
+           example: true / false
    # csv data Schema
    fileData:
         type: array
@@ -77,10 +77,10 @@ components:
           city:
              type: string
              example: Lucknow
-          addresh:
+          address:
              type: string
              example: block-543 
-# registeration route api doc
+# reregistration route api doc
 paths:
  /api/user/register:
    post:
@@ -107,7 +107,7 @@ paths:
               schema: 
                 type: string
                 items: 
-                  example: email id alredy exist
+                  example: email id already exist
                   
          200:
            description: user created successfully
@@ -120,8 +120,8 @@ paths:
 # email verification api's doc 
  /api/user/verifie-email:
      get:
-      summary: verifie the user mail
-      description: email verified through the query paramas
+      summary: verified the user mail
+      description: email verified through the query params
       parameters:
           - in: query
             name: email
@@ -131,7 +131,7 @@ paths:
            
       responses:
         200:
-         description: return a verification token to loggin
+         description: return a verification token to logging
          content:
            application/json:
              schema:
@@ -245,8 +245,8 @@ paths:
 # user forget-password_link
  /api/user/forgot-password:
       put:
-        summary: forgot password ganerate email link
-        description: forget mail genarate
+        summary: forgot password generate email link
+        description: forget mail generate
         requestBody:
             description: email and password
             required: true
@@ -325,7 +325,7 @@ paths:
              name: token
              schema:
                type: string
-             description: enter the queary token to reset the password
+             description: enter the query token to reset the password
                                                     
         responses:
          200: 
@@ -340,7 +340,7 @@ paths:
                        example: true
                     message:
                        type: string
-                       example: password has been chenged !
+                       example: password has been changed !
                     new_password:
                        type: string
                        example: fkdlflkd*******jdfgfdnkjf
@@ -445,7 +445,7 @@ paths:
              required: true                                                                    
        responses:
             200:
-               description: updated user fieald 
+               description: updated user fields 
                content:
                  application/json:
                     schema:
@@ -512,7 +512,7 @@ paths:
 # soft-delete by admin
  /api/admin/soft-delete/{id}:
      put:
-      summary: sotf-delete
+      summary: soft-delete
       description: find by id and delete
       parameters:
            - in: path
@@ -541,7 +541,7 @@ paths:
 # revert-soft delete by admin
  /api/admin/revert-deleted-user/{id}:
      put:
-      summary: revert sotf-delete
+      summary: revert soft-delete
       description: find by id and revert delete user
       parameters:
            - in: path
@@ -580,7 +580,7 @@ paths:
             schema:
                $ref: '#/components/schemas/fileData'
        400:
-        description: someting went wrong
+        description: something went wrong
         content:
           application/json:
                 schema:
@@ -612,13 +612,13 @@ paths:
            content:
              text/html:
                schema:
-                 $ref: '#/componentes/schema/fileData'                   
+                 $ref: '#/components/schema/fileData'                   
          400:
-           description: someting went wrong 
+           description: something went wrong 
            content:
              text/html:
                schema:
-                 $ref: '#/componentes/schema/fileData'
+                 $ref: '#/components/schema/fileData'
 # pagination jsonplaceHolder
  /api/jsonplaceHolder:
     get:
@@ -662,32 +662,32 @@ paths:
                schema:
                  type: object
                  properties:
-                  previouse:
+                  pervious:
                      type: object
                      properties:
                        page:
-                         type: interger
+                         type: integer
                          example: 2
                        limit: 
-                         type: interger
+                         type: integer
                          example: 2
                   next:
                      type: object
                      properties:
                        page:
-                         type: interger
+                         type: integer
                          example: 2
                        limit: 
-                         type: interger
+                         type: integer
                          example: 2
                   data:
                      type: array
                      items:
                        page:
-                         type: interger
+                         type: integer
                          example: 2
                        limit: 
-                         type: interger
+                         type: integer
                          example: 2   
 # pagination swapi
  /api/swapi:
@@ -728,31 +728,31 @@ paths:
                 schema:
                   type: object
                   properties:
-                   previouse:
+                   pervious:
                       type: object
                       properties:
                         page:
-                          type: interger
+                          type: integer
                           example: 2
                         limit: 
-                          type: interger
+                          type: integer
                           example: 2
                    next:
                       type: object
                       properties:
                         page:
-                          type: interger
+                          type: integer
                           example: 2
                         limit: 
-                          type: interger
+                          type: integer
                           example: 2
                    data:
                       type: array
                       items:
                         page:
-                          type: interger
+                          type: integer
                           example: 2
                         limit: 
-                          type: interger
+                          type: integer
                           example: 2                       
   

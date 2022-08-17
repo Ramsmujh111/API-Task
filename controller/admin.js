@@ -70,7 +70,7 @@ exports.getAllVerifiedUser = async (req, res) => {
         message: "user is not fonds",
       });
     }
-    logger.info(`seccessfull we get all verified users`, user);
+    logger.info(`successfully we get all verified users`, user);
     res.status(200).json({
       status: true,
       message: "all verified user",
@@ -167,7 +167,7 @@ exports.createUser = async (req, res) => {
       subject: `register verification mail`,
       html: `<h2>${newUser.userName}! Thanks for registering on our side</h2>
              <h4> Please verified your mail to continue... </h4>
-             <a href="http://${process.env.CLIENT_HOTS}/api/user/verifie-email?email=${newUser.email}">click to verifiy Email</a>  
+             <a href="http://${process.env.CLIENT_HOTS}/api/user/verifie-email?email=${newUser.email}">click to verify Email</a>  
       `,
     };
     // sending the response message is succeed

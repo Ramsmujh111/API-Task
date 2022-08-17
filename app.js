@@ -15,7 +15,7 @@ const port = process.env.PORT;
 
 // body parser
 app.use(express.json());
-// doc -implentations
+// doc -implantation's
 app.use("/api-docs", swagger_ui.serve, swagger_ui.setup(swaggerjsdoc));
 // user routes
 app.use("/api/user", authUserRoutes);
