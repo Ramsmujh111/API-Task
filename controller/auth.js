@@ -5,6 +5,9 @@ const jwt = require("jsonwebtoken");
 const nodemailer = require("nodemailer");
 const logger = require("../config/winston");
 
+/**
+ * Email configuration
+ */
 let mailTransporter = nodemailer.createTransport({
   host: "smtp.gmail.com",
   port: 587,
@@ -18,7 +21,17 @@ let mailTransporter = nodemailer.createTransport({
   },
 });
 
-// register page
+/**
+ * register page
+ * @param {*} req 
+ * @param {*} res 
+ * @param {string} user name
+ * @param {string} user email
+ * @param {string} user password
+ * @param {string} user confirm password
+ * @param {boolean} user isAdmin
+ * @returns {object} user email verification message
+ */
 exports.postRegister = async (req, res) => {
   try {
     const validation = await validationSchema.validateAsync(req.body);
@@ -28,7 +41,7 @@ exports.postRegister = async (req, res) => {
       logger.error(`Email id already exist`);
       return res.status(400).json({
         status: false,
-        message: "Emai id already exist",
+        message: "Email id already exist",
       });
     }
     // hashing the password:
@@ -78,7 +91,13 @@ exports.postRegister = async (req, res) => {
   }
 };
 
-// email verifications -------------------------------------------------------------------------------
+/**
+ * email verifications
+ * @param {*} req 
+ * @param {*} res 
+ * @param {string} user email for conform the user is register user or not
+ * @returns {object} user details
+ */ 
 exports.emailVerifications = async (req, res) => {
   //verify web token
   try {
@@ -89,10 +108,10 @@ exports.emailVerifications = async (req, res) => {
       logger.error(`we can't find with this mail id`);
       return res.status(400).json({
         status: false,
-        message: "somethis goes wrong",
+        message: "something goes wrong",
       });
     } else if (user.isVerifiead) {
-      logger.info(`user already verifiead`);
+      logger.info(`user already verified`);
       return res.status(409).json({
         status: false,
         message: "Already Exists",
@@ -110,10 +129,10 @@ exports.emailVerifications = async (req, res) => {
       { expiresIn: "2d" }
     );
     user.login_access_key = login_access_key;
-    logger.info(`Verificatins Succucessfuly complete!. please login`);
+    logger.info(`Verifications Successfully complete!. please login`);
     res.status(200).json({
       status: true,
-      message: "Verificatins Succucessfuly complete!. please login",
+      message: "Verifications Successfully complete!. please login",
       login_access_key: user.login_access_key,
     });
   } catch (error) {
@@ -125,7 +144,14 @@ exports.emailVerifications = async (req, res) => {
   }
 };
 
-// user login ----------------------------------------------------------------------------
+/**
+ * user login details
+ * @param {*} req 
+ * @param {*} res 
+ * @param {string} user email
+ * @param {string} user password
+ * @returns {object} user details
+ */ 
 exports.postLogin = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -135,7 +161,7 @@ exports.postLogin = async (req, res) => {
       // log is user email does't match
       logger.error(`email and password is not match`);
       res.status(401).json({
-        message: "emai and password is not match",
+        message: "Email and password is not match",
       });
     } else {
       const isPasswordMatch = await bcrypt.compare(password, user.password);
@@ -145,7 +171,7 @@ exports.postLogin = async (req, res) => {
         logger.error(`email and password is not match`);
 
         res.status(404).json({
-          message: "emai and password is not match",
+          message: "Email and password is not match",
         });
       } else {
         // create the jsonwebtoken
@@ -175,7 +201,7 @@ exports.postLogin = async (req, res) => {
       }
     }
   } catch (error) {
-    // if some error occure log the error
+    // if some error occurs log the error
     logger.error(error.message);
     res.status(200).json({
       status: false,
@@ -184,7 +210,13 @@ exports.postLogin = async (req, res) => {
   }
 };
 
-// forget-passsword-------------------------------------------------------
+/**
+ * forget-password
+ * @param {*} req 
+ * @param {*} res 
+ * @param {string} user email
+ * @returns {object} send the mail as a response to forget-password
+ */
 
 exports.forgetPassword = async (req, res) => {
   const { email } = req.body;
@@ -230,7 +262,7 @@ exports.forgetPassword = async (req, res) => {
     user.resetLink = accessToken;
     // save the user
     user.save();
-    logger.info(`email has been send kundly forget-password`);
+    logger.info(`email has been send kindly forget-password`);
     res.status(250).json({
       status: true,
       message: "email have been send kindly forget-password",
@@ -245,7 +277,14 @@ exports.forgetPassword = async (req, res) => {
   }
 };
 
-// reset-password -------------------------------------------------------------------------
+/**
+ * reset-password
+ * @param {*} req 
+ * @param {*} res
+ * @param {string} token jwt verified token to verified user or not
+ * @param {string} newPassword user enter the new password and send the old-password === newPassword
+ * @return {object} return the user details
+ */
 
 exports.resetPassword = async (req, res) => {
   const resetLink = req.query.token;
@@ -271,8 +310,7 @@ exports.resetPassword = async (req, res) => {
           message: "user with this token is not exist",
         });
       }
-      // hasing the password and save
-      // hashing the password:
+      // hashing the password and save
       const salt = await bcrypt.genSalt(10);
       const hasPassword = bcrypt.hashSync(new_Password, salt);
       let old_password = save_user.password;
@@ -280,12 +318,12 @@ exports.resetPassword = async (req, res) => {
       save_user.password = hasPassword;
       // reset the reset link
       save_user.resetLink = null;
-      // save new password into databaes
+      // save new password into database
       save_user.save();
       logger.info(`password has been changed`);
       res.status(200).json({
         status: true,
-        message: "password has been chenged ,",
+        message: "password has been changed ,",
         new_Password,
         old_password,
       });
