@@ -62,8 +62,8 @@ exports.postRegister = async (req, res) => {
       from: `dev.bit.ram@gmail.com`,
       to: newUser.email,
       subject: `register verification mail`,
-      html: `<h2>${newUser.userName}! Thanks for registering on our side</h2>
-             <h4> Please verified your mail to continue... </h4>
+      html: `<h2>${newUser.userName}! Thanks for registering on our site</h2>
+             <h4> Please verify your mail to continue... </h4>
              <a href="http://${process.env.CLIENT_HOST}/api/user/verify-email?email=${newUser.email}">click to Verify Email</a>  
       `,
     };
@@ -108,32 +108,25 @@ exports.emailVerifications = async (req, res) => {
       logger.error(`we can't find with this mail id`);
       return res.status(400).json({
         status: false,
-        message: "something goes wrong",
+        message: "swe can't find with this mail id",
       });
     } else if (user.isVerifiead) {
       logger.info(`user already verified`);
       return res.status(409).json({
         status: false,
-        message: "Already Exists",
+        message: "user already verified",
       });
     }
     user.isVerifiead = true;
     user.save();
-    // create the new login access key
-    const login_access_key = jwt.sign(
-      {
-        _id: user._id,
-        isVerifiead: user.isVerifiead,
-      },
-      process.env.JWT_SECRET_KEY,
-      { expiresIn: "2d" }
-    );
-    user.login_access_key = login_access_key;
     logger.info(`Verifications Successfully complete!. please login`);
     res.status(200).json({
       status: true,
       message: "Verifications Successfully complete!. please login",
-      login_access_key: user.login_access_key,
+      Login_Details:{
+        user_email:`example@gmail.com`,
+        user_password:`example123` 
+      }
     });
   } catch (error) {
     logger.error(error.message);
