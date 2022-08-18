@@ -171,7 +171,6 @@ exports.postLogin = async (req, res) => {
         const accessToken = jwt.sign(
           {
             _id: user._id,
-            isAdmin: user.isAdmin,
           },
           process.env.JWT_SECRET_KEY,
           { expiresIn: "2d" }
