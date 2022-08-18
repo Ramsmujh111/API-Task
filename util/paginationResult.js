@@ -1,4 +1,8 @@
 const getPaginatedResult = (data, page, limit) => {
+  if(!page && !limit){
+    page = 1;
+    limit = data.length;
+  }
   let paginatedResponse = {};
   const startIndex = (page - 1) * limit;
   const endIndex = page * limit;
