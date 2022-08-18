@@ -238,7 +238,7 @@ exports.forgetPassword = async (req, res) => {
       to: user.email,
       subject: `forget password link`,
       html: `<h2>${user.userName}! Please forget the password</h2>
-             <a href="http://${process.env.CLIENT_HOTS}/api/user/reset-password?token=${accessToken}">click to forget the password </a>  
+             <a href="http://${process.env.CLIENT_HOST}/api/user/reset-password?token=${accessToken}">click to forget the password </a>  
       `,
     };
     mailTransporter.sendMail(details, (err)=>{
