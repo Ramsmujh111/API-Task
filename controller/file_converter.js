@@ -60,7 +60,7 @@ exports.json_to_csv = async (req, res) => {
     logger.error("user is the null value");
     return res.status(400).json({
       message:
-        "length should be greater than 0 || we does not accept null value",
+        "please upload the file..",
     });
   }
 
