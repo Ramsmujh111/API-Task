@@ -30,12 +30,12 @@ const verifyUsers = async (req, res, next) => {
   try {
     const email = req.body.email;
     const user = await User.findOne({ email: email });
-    if(!user){
+    if (!user) {
       logger.error(`Enter the valid email`);
       res.status(401).json({
-        status:false,
-        message:`Enter valid email to continue..`
-      })
+        status: false,
+        message: `Enter valid email to continue..`,
+      });
     }
     if (user.isVerifiead) {
       return next();
@@ -49,20 +49,32 @@ const verifyUsers = async (req, res, next) => {
   } catch (error) {
     logger.error(error.message);
     res.status(400).json({
-      status:false,
-      message:error.message
-    })
+      status: false,
+      message: error.message,
+    });
   }
 };
 
 // this token is authenticate the admin
 const verifyTokenAndAdmin = (req, res, next) => {
-  verifyToken(req, res, () => {
-    if (req.user.isAdmin) {
-      next();
-    } else {
-      logger.error(`You are not allow to do that`);
-      res.status(403).json({ message: "You are not allow to do that" });
+  verifyToken(req, res, async () => {
+    try {
+      const user = await User.findById(req.user._id);
+      if (user.isAdmin) {
+        next();
+      } else {
+        logger.error(`You are not allow to do that`);
+        res.status(403).json({
+          status:false,
+          message: "You are not allow to do that",
+        });
+      }
+    } catch (error) {
+      logger.error(error.message);
+      res.status(400).json({
+        status: false,
+        message: error.message,
+      });
     }
   });
 };
