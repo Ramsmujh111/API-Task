@@ -1,0 +1,450 @@
+{
+	"info": {
+		"_postman_id": "49cf6adb-faaf-4bc0-8391-53d357b89933",
+		"name": "APT-TASK",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "20467442"
+	},
+	"item": [
+		{
+			"name": "User registration routes",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"userName\":\"newName\",\r\n    \"email\":\"dev.bit.ram@gmail.com\",\r\n    \"password\":\"rahul4321333\"\r\n    \r\n    \r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8081/api/user/register",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"api",
+						"user",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "verications-mail-request",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "x-access-token",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InJhaHVsMTIzNDVAbWFpbGluYXRvci5jb20iLCJpc1ZlcmlmaWVhZCI6ZmFsc2UsImlhdCI6MTY1OTk1NDk5OSwiZXhwIjoxNjYwMTI3Nzk5fQ.OH3fIeidVm6FgseFAK39PijC3Jzmx3V_jywzMrWpGhY",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "localhost:8081/api/user/verify-email?email=example@gmail.com",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"api",
+						"user",
+						"verify-email"
+					],
+					"query": [
+						{
+							"key": "email",
+							"value": "example@gmail.com"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Post_login_routes",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "x-access-token",
+						"value": "JhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc1ZlcmlmaWVhZCI6dHJ1ZSwiaWF0IjoxNjU5MDgwMzIyLCJleHAiOjE2NTkyNTMxMjJ9.NLd1uYEyY4WYOGOt2R9YIgUTeKARlzhjVtU3f7YPi8o",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\":\"ramsmujhkumarbharti@gmail.com\",\r\n    \"password\":\"ram123\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8081/api/user/login",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"api",
+						"user",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "forget_password_",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "x-access-token",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MmYwZTczN2JlZmUxZGU2ZTNjOTFlYzMiLCJpc1ZlcmlmaWVhZCI6dHJ1ZSwiaWF0IjoxNjU5OTU1MDI4LCJleHAiOjE2NjAxMjc4Mjh9.BiciB5CVz9dSB-2CrjDsKOMI9sH8GNPY4VWB_HBSr38",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\":\"example@gmail.com\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8081/api/user/forgot-password",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"api",
+						"user",
+						"forgot-password"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "reset_password",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "",
+						"value": "",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"newPassword\":\"example@345\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8081/api/user/reset-password?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MmZmMzk3NWU1MTgzNmQ1NzAwMGFiMzEiLCJpYXQiOjE2NjA4OTM2MDMsImV4cCI6MTY2MDkwMDgwM30.S40xKcZZqFiasPOToU6A3nQeCyzCkw9Hbzi5H0Z6Zao",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"api",
+						"user",
+						"reset-password"
+					],
+					"query": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MmZmMzk3NWU1MTgzNmQ1NzAwMGFiMzEiLCJpYXQiOjE2NjA4OTM2MDMsImV4cCI6MTY2MDkwMDgwM30.S40xKcZZqFiasPOToU6A3nQeCyzCkw9Hbzi5H0Z6Zao"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "admin/all-user",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "x-access-token",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MmZmMzk3NWU1MTgzNmQ1NzAwMGFiMzEiLCJpYXQiOjE2NjA5MDA4ODgsImV4cCI6MTY2MTA3MzY4OH0.gFov9CU7otHaWgTQngZlDIBRDBt25-4ECuvXQzXdqsQ",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "localhost:8081/api/admin/all-user",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"api",
+						"admin",
+						"all-user"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "admin/Get Verified user",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "x-access-token",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MmZmMzk3NWU1MTgzNmQ1NzAwMGFiMzEiLCJpYXQiOjE2NjA5MDA4ODgsImV4cCI6MTY2MTA3MzY4OH0.gFov9CU7otHaWgTQngZlDIBRDBt25-4ECuvXQzXdqsQ",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "localhost:8081/api/admin/verified-user?verified=false",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"api",
+						"admin",
+						"verified-user"
+					],
+					"query": [
+						{
+							"key": "verified",
+							"value": "false"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "soft-delete",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "x-access-token",
+						"value": "nvjfdbhdshjdfjhbdjhbfdhjdsjhbfdjdsfgkjfdbkjdfgkjshfdkgshdkhskdhfiuret4y74fkjfdhgsrytikshgkrdhgireiu",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "localhost:8081/api/admin/soft-delete/:id",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"api",
+						"admin",
+						"soft-delete",
+						":id"
+					],
+					"variable": [
+						{
+							"key": "id",
+							"value": null
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "admin-create-user",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "x-access-token",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MmZmOGZlMDlhNWRhNWQ4YTI3N2NkMzMiLCJpYXQiOjE2NjA5MTYzMzIsImV4cCI6MTY2MTA4OTEzMn0.NSu0oapF70BO8hB6YwMeTkr1fUE_nUIriQjoopF4qck",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"userName\":\"zxxxxxxx\",\r\n    \"email\":\"xxxx@gmail.com\",\r\n    \"password\":\"example4321333\" \r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8081/api/admin/create-user",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"api",
+						"admin",
+						"create-user"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "jsonPlace_holder_pagination",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "x-access-token",
+						"value": "Enter your admin token here",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "localhost:8081/api/jsonplaceHolder?page=4&limit=5",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"api",
+						"jsonplaceHolder"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "4"
+						},
+						{
+							"key": "limit",
+							"value": "5"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "swapi_api_pagination",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "x-access-token",
+						"value": "enter your token here",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "localhost:8081/api/swapi?page=2&limit=2",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"api",
+						"swapi"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "2"
+						},
+						{
+							"key": "limit",
+							"value": "2"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Admin create user",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "javascript"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8081/api/admin/create-user",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"api",
+						"admin",
+						"create-user"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Admin get user by id",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "x-access-token",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MmZjOWZiNDI3MjFhZDdkNjdkOTlmOWUiLCJpc0FkbWluIjp0cnVlLCJpYXQiOjE2NjA3MjMyMTMsImV4cCI6MTY2MDg5NjAxM30.UZty4hpp3ntuLUOdHr29hC9imf_jQhUXY6JVAviEx0E",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "localhost:8081/api/admin/getById/:id",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"api",
+						"admin",
+						"getById",
+						":id"
+					],
+					"variable": [
+						{
+							"key": "id",
+							"value": null
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
