@@ -34,17 +34,6 @@ components:
            required: true
            description: password of user
            example: ramsmujh@123
-        confirm_password:
-           type: string
-           required: true
-           description: conform password of user of user
-           example: ramsmujh@123
-        isAdmin:
-           type: boolean
-           example: true / false
-        isVerified:
-           type: boolean
-           example: true / false
   # user schema 
    User:
       type: object
@@ -85,6 +74,7 @@ paths:
  /api/user/register:
    post:
        summary: create the user
+       tags: [USER]
        description: create the user
        requestBody:
          description: user data form from optional data
@@ -121,6 +111,7 @@ paths:
  /api/user/verify-email:
      get:
       summary: verified the user mail
+      tags: [USER]
       description: email verified through the query params
       parameters:
           - in: query
@@ -142,10 +133,7 @@ paths:
                  example: true
                 message:
                  type: string
-                 example: something
-                login_access_key:
-                 type: string
-                 example: jfnskdfkds          
+                 example: something         
         403:
          description: Forbidden
          content:
@@ -186,6 +174,7 @@ paths:
  /api/user/login:
       post:
        summary: login a register user
+       tags: [USER]
        description: request body to enter the email and password
        requestBody:
             description: email and password
@@ -205,13 +194,6 @@ paths:
                       required: true
                       description: password of user
                       example: ramsmujh@123
-       parameters:
-          - in: header
-            name: x-access-token
-            schema:
-              type: string
-            required: true
-  
        responses:
          200: 
            description: success
@@ -229,6 +211,19 @@ paths:
                    profile:
                       schema:
                         $ref: '#/components/schemas/User'
+         400:
+           description: email id and password dos't match
+           content:
+            application/json:
+             schema:
+               type: object
+               properties:
+                status:
+                 type: boolean
+                 example: true / false
+                message:
+                 type: string
+                 example: email and password does't match
          404:
            description: email id and password dos't match
            content:
@@ -246,6 +241,7 @@ paths:
  /api/user/forgot-password:
       put:
         summary: forgot password generate email link
+        tags: [USER]
         description: forget mail generate
         requestBody:
             description: email and password
@@ -259,14 +255,7 @@ paths:
                       type: string
                       required: true
                       description: email of user
-                      example: xyz@gmail.com
-        parameters:
-          - in: header
-            name: x-access-token
-            schema:
-              type: string
-            required: true
-       
+                      example: xyz@gmail.com      
         responses:
          250: 
            description: success
@@ -301,6 +290,7 @@ paths:
  /api/user/reset-password:
       put:
         summary: reset password 
+        tags: [USER]
         description: click the link and reset password
         requestBody:
             description: email and password
@@ -316,11 +306,6 @@ paths:
                       description: email of user
                       example: xyz@gmail.com
         parameters:
-           - in: header
-             name: x-access-token
-             schema:
-               type: string
-             required: true
            - in: query
              name: token
              schema:
@@ -366,6 +351,7 @@ paths:
  /api/admin/all-user:
      get:
        summary: get all user
+       tags: [ADMIN]
        description: get all user
        parameters:
          - in: header
@@ -396,6 +382,7 @@ paths:
  /api/admin/verified-user:
       get:
         summary: all verified user
+        tags: [ADMIN]
         description: find all verified user
         parameters:
           - in: header
@@ -421,6 +408,7 @@ paths:
  /api/admin/update/{id}:
       put:
        summary: find by id and update
+       tags: [ADMIN]
        description: user update by id 
        requestBody:
            description: update any field which you wanna
@@ -456,6 +444,7 @@ paths:
  /api/admin/create-user:
       post:
         summary: admin create user
+        tags: [ADMIN]
         description: admin create user
         requestBody:
             description: create user 
@@ -484,6 +473,7 @@ paths:
  /api/admin/getById/{id}:
     get:
       summary: get user by id
+      tags: [ADMIN]
       description: get user by id
       parameters:
            - in: path
@@ -513,6 +503,7 @@ paths:
  /api/admin/soft-delete/{id}:
      put:
       summary: soft-delete
+      tags: [ADMIN]
       description: find by id and delete
       parameters:
            - in: path
@@ -542,6 +533,7 @@ paths:
  /api/admin/revert-deleted-user/{id}:
      put:
       summary: revert soft-delete
+      tags: [ADMIN]
       description: find by id and revert delete user
       parameters:
            - in: path
@@ -571,7 +563,16 @@ paths:
  /api/csv-to-json:
    get:
      summary: Return a csv for to json data
+     tags: [DATA CONVERTER]
      description: this is the form-convert-json-to cvs form !
+     parameters:
+       - in: header
+         name: x-access-token
+         required: true
+         schema:
+           type: string
+           required: true
+           example: dfndfd
      responses:
        200:   #status code
         description: cvs data to json form
@@ -596,6 +597,7 @@ paths:
  /api/json-to-csv:
    post:
       summary: return json data to cvs form data
+      tags: [DATA CONVERTER]
       description: convert json data to excel file
       requestBody:
     
@@ -605,6 +607,14 @@ paths:
            application/json:
              schema:
                 $ref: '#/components/schema/fileData'
+      parameters:
+        - in: header
+          name: x-access-token
+          required: true
+          schema:
+            type: string
+            required: true
+            example: dfndfd
   
       responses:
          200:
@@ -623,36 +633,36 @@ paths:
  /api/jsonplaceHolder:
     get:
      summary: set the pagination 
+     tags: [FETCH API RESPONSE]
      description: set the query as a page and limit
      parameters:
-          - in: query
-            name: page
+          - in: header
+            name: x-access-token
             required: true
             schema:
-              type: integer
+              type: string
               required: true
+              example: dfndfd
+          - in: query
+            name: page
+            schema:
+              type: integer
               example: 1   
           - in: query
             name: limit
-            required: true
             schema:
               type: integer
-              required: true
               example: 1   
           - in: query
             name: sortBy
-            required: true
             schema:
               type: string
-              required: true
               example: id_name   
           - in: query
             name: orderBy
-            required: true
             schema:
               type: string
-              required: true
-              example: desc/acs   
+              example: desc/acs 
  
      responses:
         200: 
@@ -693,6 +703,7 @@ paths:
  /api/swapi:
      get:
       summary: set the pagination 
+      tags: [FETCH API RESPONSE]
       description: set the query as a page and limit
       parameters:
            - in: query
@@ -718,7 +729,13 @@ paths:
              name: orderBy
              schema:
                type: string
-               example: asc/desc   
+               example: asc/desc 
+           - in: header
+             name: x-access-token
+             required: true
+             schema:
+              type: string
+              required: true  
   
       responses:
          200: 

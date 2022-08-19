@@ -23,8 +23,8 @@ let mailTransporter = nodemailer.createTransport({
 
 /**
  * register page
- * @param {*} req 
- * @param {*} res 
+ * @param {*} req
+ * @param {*} res
  * @param {string} user name
  * @param {string} user email
  * @param {string} user password
@@ -56,32 +56,33 @@ exports.postRegister = async (req, res) => {
       isVerifiead: validation.isVerifiead,
     });
     // if user is store in database-------
-    newUser.save();
-    // send the email to user
-    let details = {
-      from: `dev.bit.ram@gmail.com`,
-      to: newUser.email,
-      subject: `register verification mail`,
-      html: `<h2>${newUser.userName}! Thanks for registering on our site</h2>
+    if (await newUser.save()) {
+      // send the email to user
+      let details = {
+        from: `dev.bit.ram@gmail.com`,
+        to: newUser.email,
+        subject: `register verification mail`,
+        html: `<h2>${newUser.userName}! Thanks for registering on our site</h2>
              <h4> Please verify your mail to continue... </h4>
              <a href="http://${process.env.CLIENT_HOST}/api/user/verify-email?email=${newUser.email}">click to Verify Email</a>  
       `,
-    };
-    // sending the response message is succeed
-    mailTransporter.sendMail(details, (err) => {
-      if (err) {
-        logger.error(err.message);
-        return res.status(400).json({
-          status: false,
-          message: err.message,
+      };
+      // sending the response message is succeed
+      return mailTransporter.sendMail(details, (err) => {
+        if (err) {
+          logger.error(err.message);
+          return res.status(400).json({
+            status: false,
+            message: err.message,
+          });
+        }
+        logger.info(`Email has been send Please verify email`);
+        res.status(201).json({
+          status: true,
+          message: "verification mail has been send",
         });
-      }
-      logger.info(`verifications mail has been send`);
-      return res.status(201).json({
-        status: true,
-        message: "verification mail has been send",
       });
-    });
+    }
   } catch (error) {
     logger.error(error.message);
     res.status(400).json({
@@ -93,11 +94,11 @@ exports.postRegister = async (req, res) => {
 
 /**
  * email verifications
- * @param {*} req 
- * @param {*} res 
+ * @param {*} req
+ * @param {*} res
  * @param {string} user email for conform the user is register user or not
  * @returns {object} user details
- */ 
+ */
 exports.emailVerifications = async (req, res) => {
   //verify web token
   try {
@@ -108,7 +109,7 @@ exports.emailVerifications = async (req, res) => {
       logger.error(`we can't find with this mail id`);
       return res.status(400).json({
         status: false,
-        message: "swe can't find with this mail id",
+        message: "we can't find with this mail id",
       });
     } else if (user.isVerifiead) {
       logger.info(`user already verified`);
@@ -123,10 +124,10 @@ exports.emailVerifications = async (req, res) => {
     res.status(200).json({
       status: true,
       message: "Verifications Successfully complete!. please login",
-      Login_Details:{
-        user_email:`example@gmail.com`,
-        user_password:`example123` 
-      }
+      Login_Details: {
+        user_email: `example@gmail.com`,
+        user_password: `example123`,
+      },
     });
   } catch (error) {
     logger.error(error.message);
@@ -139,12 +140,12 @@ exports.emailVerifications = async (req, res) => {
 
 /**
  * user login details
- * @param {*} req 
- * @param {*} res 
+ * @param {*} req
+ * @param {*} res
  * @param {string} user email
  * @param {string} user password
  * @returns {object} user details
- */ 
+ */
 exports.postLogin = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -204,8 +205,8 @@ exports.postLogin = async (req, res) => {
 
 /**
  * forget-password
- * @param {*} req 
- * @param {*} res 
+ * @param {*} req
+ * @param {*} res
  * @param {string} user email
  * @returns {object} send the mail as a response to forget-password
  */
@@ -241,15 +242,15 @@ exports.forgetPassword = async (req, res) => {
              <a href="http://${process.env.CLIENT_HOST}/api/user/reset-password?token=${accessToken}">click to forget the password </a>  
       `,
     };
-    mailTransporter.sendMail(details, (err)=>{
-      if(err){
+    mailTransporter.sendMail(details, (err) => {
+      if (err) {
         logger.error(err.message);
-       return res.status(400).json({
+        return res.status(400).json({
           status: false,
-          message: err.message
-        })
+          message: err.message,
+        });
       }
-    })
+    });
     // store the data is the resetLink in token
     user.resetLink = accessToken;
     // save the user
@@ -271,7 +272,7 @@ exports.forgetPassword = async (req, res) => {
 
 /**
  * reset-password
- * @param {*} req 
+ * @param {*} req
  * @param {*} res
  * @param {string} token jwt verified token to verified user or not
  * @param {string} newPassword user enter the new password and send the old-password === newPassword
