@@ -5,7 +5,7 @@ const logger = require(`../config/winston`);
 const nodemailer = require("nodemailer");
 
 /**
- * email configuration 
+ * email configuration
  */
 let mailTransporter = nodemailer.createTransport({
   host: "smtp.gmail.com",
@@ -20,14 +20,13 @@ let mailTransporter = nodemailer.createTransport({
   },
 });
 
-
 /**
  * @description get method for fetch all user
- * @param {*} req 
- * @param {*} res 
- * @param {string} name of the user 
+ * @param {*} req
+ * @param {*} res
+ * @param {string} name of the user
  * @return {object} user
- *  
+ *
  */
 exports.getAllUser = async (req, res) => {
   const query = req.query.name;
@@ -50,9 +49,9 @@ exports.getAllUser = async (req, res) => {
 };
 
 /**
- * @description get method for fetch all verified users 
- * @param {*} req 
- * @param {*} res 
+ * @description get method for fetch all verified users
+ * @param {*} req
+ * @param {*} res
  * @param {boolean} find verified user in data
  * @return {object} user return find user
  */
@@ -87,8 +86,8 @@ exports.getAllVerifiedUser = async (req, res) => {
 
 /**
  * @description put method update the particular user
- * @param {*} req 
- * @param {*} res 
+ * @param {*} req
+ * @param {*} res
  * @param {string} id find user by id and update
  * @return {object} user return updated user
  */
@@ -101,6 +100,7 @@ exports.updateUser = async (req, res) => {
       },
       { new: true }
     );
+
     // log info
     logger.info(`user update successfully............`);
     res.status(200).json({
@@ -118,8 +118,8 @@ exports.updateUser = async (req, res) => {
 };
 /**
  * @description post method for create user by admin
- * @param {*} req 
- * @param {*} res 
+ * @param {*} req
+ * @param {*} res
  * @param {string} user name
  * @param {string} user password
  * @param {email} user email
@@ -158,33 +158,33 @@ exports.createUser = async (req, res) => {
       isVerifiead: validation.isVerifiead,
     });
     // if user is store in database-------
-    logger.info(`user has been created`);
-    newUser.save();
-    // send mail for the verification 
-    let details = {
-      from: `dev.bit.ram@gmail.com`,
-      to: newUser.email,
-      subject: `register verification mail`,
-      html: `<h2>${newUser.userName}! Thanks for registering on our side</h2>
-             <h4> Please verified your mail to continue... </h4>
-             <a href="http://${process.env.CLIENT_HOST}/api/user/verify-email?email=${newUser.email}">click to verify Email</a>  
-      `,
-    };
-    // sending the response message is succeed
-    mailTransporter.sendMail(details, (err) => {
-      if (err) {
-        logger.error(err.message);
-        return res.status(400).json({
-          status: false,
-          message: err.message,
+    if (await newUser.save()) {
+      // send the email to user
+      let details = {
+        from: `dev.bit.ram@gmail.com`,
+        to: newUser.email,
+        subject: `register verification mail`,
+        html: `<h2>${newUser.userName}! Thanks for registering on our site</h2>
+         <h4> Please verify your mail to continue... </h4>
+         <a href="http://${process.env.CLIENT_HOST}/api/user/verify-email?email=${newUser.email}">click to Verify Email</a>  
+  `,
+      };
+      // sending the response message is succeed
+      return mailTransporter.sendMail(details, (err) => {
+        if (err) {
+          logger.error(err.message);
+          return res.status(400).json({
+            status: false,
+            message: err.message,
+          });
+        }
+        logger.info(`Email has been send Please verify email`);
+        res.status(201).json({
+          status: true,
+          message: "verification mail has been send",
         });
-      }
-      logger.info(`verifications mail has been send`);
-      return res.status(201).json({
-        status: true,
-        message: "verification mail has been send",
       });
-    });
+    }
   } catch (err) {
     logger.error(err.message);
     res.status(400).json({
@@ -195,21 +195,29 @@ exports.createUser = async (req, res) => {
 };
 
 /**
- * @description get method for get user by id 
- * @param {*} req 
- * @param {*} res 
- * @param {string} id user id 
+ * @description get method for get user by id
+ * @param {*} req
+ * @param {*} res
+ * @param {string} id user id
  * @returns {object} user details return
- */ 
+ */
 exports.getUserById = async (req, res) => {
   const paramId = req.params.id;
   try {
     const user = await User.findById(paramId);
-    if(user.deletedAt){
-       return res.status(203).json({
-        status:false,
-        message:`we did't find user with this id`
-       })
+    if (user) {
+      if (user.deletedAt) {
+        return res.status(400).json({
+          status: false,
+          message: `we did't find user with this id`,
+        });
+      }
+      logger.info(`user find successfully`);
+      res.status(200).json({
+        status: true,
+        message: "user details is ",
+        user,
+      });
     }
     if (!user && Object.keys(user).length <= 0) {
       return res.status(400).json({
@@ -217,12 +225,6 @@ exports.getUserById = async (req, res) => {
         message: `user with this is not available`,
       });
     }
-    logger.info(`user find successfully`);
-    res.status(200).json({
-      status: true,
-      message: "user details is ",
-      user,
-    });
   } catch (err) {
     logger.error(err.message);
     res.status(400).json({
@@ -234,8 +236,8 @@ exports.getUserById = async (req, res) => {
 
 /**
  * @description put method for soft delete user
- * @param {*} req 
- * @param {*} res 
+ * @param {*} req
+ * @param {*} res
  * @param {string} id find by user id and update as deletedAt
  * @returns {string} message user has been deleted
  */
@@ -272,8 +274,8 @@ exports.softDelete = async (req, res) => {
 };
 /**
  * @description put method for revert soft deleted user
- * @param {*} req 
- * @param {*} res 
+ * @param {*} req
+ * @param {*} res
  * @param {string} id soft deleted user id
  * @returns {message} message revert deleted user
  */
