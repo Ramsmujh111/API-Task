@@ -22,7 +22,7 @@ let mailTransporter = nodemailer.createTransport({
 });
 
 /**
- * register page
+ * @description register page
  * @param {*} req
  * @param {*} res
  * @param {string} user name
@@ -93,7 +93,7 @@ exports.postRegister = async (req, res) => {
 };
 
 /**
- * email verifications
+ * @description email verifications
  * @param {*} req
  * @param {*} res
  * @param {string} user email for conform the user is register user or not
@@ -139,7 +139,7 @@ exports.emailVerifications = async (req, res) => {
 };
 
 /**
- * user login details
+ * @description user login details
  * @param {*} req
  * @param {*} res
  * @param {string} user email
@@ -204,7 +204,7 @@ exports.postLogin = async (req, res) => {
 };
 
 /**
- * forget-password
+ * @description forget-password
  * @param {*} req
  * @param {*} res
  * @param {string} user email
@@ -271,7 +271,7 @@ exports.forgetPassword = async (req, res) => {
 };
 
 /**
- * reset-password
+ * @description reset-password
  * @param {*} req
  * @param {*} res
  * @param {string} token jwt verified token to verified user or not
