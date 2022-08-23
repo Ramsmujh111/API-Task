@@ -29,8 +29,8 @@ const logger = winston.createLogger({
   transports: [
     // this is console the message in the console
     new winston.transports.Console(),
-    new winston.transports.File({ filename: `logs/error_${date.getFullYear()+'-'+date.getDate()+'-'+date.getDay()}.log`, level: "error" }),
-    new winston.transports.File({ filename: `logs/info_${date.getFullYear()+'-'+date.getDate()+'-'+date.getDay()}.log` }),
+    new winston.transports.File({ filename: `logs_file/error_${date.getFullYear()+'-'+date.getDate()+'-'+date.getDay()}.log`, level: "error" }),
+    new winston.transports.File({ filename: `logs_file/info_${date.getFullYear()+'-'+date.getDate()+'-'+date.getDay()}.log` }),
   ],
 });
 
