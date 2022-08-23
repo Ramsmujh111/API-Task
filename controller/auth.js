@@ -53,7 +53,7 @@ exports.postRegister = async (req, res) => {
       email: validation.email,
       password: hasPassword,
       isAdmin: validation.isAdmin,
-      isVerifiead: validation.isVerifiead,
+      isVerified: validation.isVerified,
     });
     // if user is store in database-------
     if (await newUser.save()) {
@@ -111,14 +111,14 @@ exports.emailVerifications = async (req, res) => {
         status: false,
         message: "we can't find with this mail id",
       });
-    } else if (user.isVerifiead) {
+    } else if (user.isVerified) {
       logger.info(`user already verified`);
       return res.status(409).json({
         status: false,
         message: "user already verified",
       });
     }
-    user.isVerifiead = true;
+    user.isVerified = true;
     user.save();
     logger.info(`Verifications Successfully complete!. please login`);
     res.status(200).json({
@@ -312,15 +312,81 @@ exports.resetPassword = async (req, res) => {
       // reset the reset link
       save_user.resetLink = null;
       // save new password into database
-      save_user.save();
-      logger.info(`password has been changed`);
-      res.status(200).json({
-        status: true,
-        message: "password has been changed ,",
-        new_Password,
-        old_password,
-      });
+      if (await save_user.save()) {
+        logger.info(`password has been changed`);
+        res.status(200).json({
+          status: true,
+          message: "password has been changed ,",
+          new_Password,
+          old_password,
+        });
+      }
     });
+  } catch (error) {
+    logger.error(error.message);
+    res.status(400).json({
+      status: false,
+      message: error.message,
+    });
+  }
+};
+
+/**
+ * @description
+ * @param {object} req
+ * @param {object} res
+ * @param {string} email extract from the body
+ * @param {string} old_password extract from the body
+ * @param {string} new_password extract from the body
+ * @returns {object} response and user old password and new password
+ */
+exports.changePassword = async (req, res) => {
+  try {
+    const { email, old_password, new_password } = req.body;
+    const user = await User.findOne({ email: email });
+    if (!user) {
+      logger.error(`User mail does't match`);
+      return res.status(400).json({
+        status: false,
+        message: `email id is not available`,
+      });
+    }
+    const comparePassword = await bcrypt.compare(old_password, user.password);
+    if (!comparePassword) {
+      logger.error(`Password does not match`);
+      return res.status(400).json({
+        status: false,
+        message: `Password does not match`,
+      });
+    }
+    // generate the salt
+    if(!new_password && new_password.length<1){
+       logger.error(`Please Enter the valid New password`);
+       return res.status(400).json({
+        status:false,
+        message:`Please Enter the valid New Password`
+       })
+    }
+    const salt = await bcrypt.genSalt(10);
+    const hasPassword = bcrypt.hashSync(new_password, salt);
+    if (!hasPassword) {
+      logger.error(`Please Enter the New Password`);
+      return res.status(400).json({
+        status: false,
+        message: `Enter the New Password`,
+      });
+    }
+    // save the password in database;
+    user.password = hasPassword;
+    if (await user.save()) {
+      logger.info(`Password has been change`);
+      return res.status(201).json({
+        status: true,
+        message: `Password has been change`,
+        old_password,
+        new_password,
+      });
+    }
   } catch (error) {
     logger.error(error.message);
     res.status(400).json({

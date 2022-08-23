@@ -24,7 +24,7 @@ const userSchema = new Schema({
     type: String,
     default: null,
   },
-  isVerifiead: {
+  isVerified: {
     type: Boolean,
     default: false,
   },
