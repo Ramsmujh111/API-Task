@@ -1,7 +1,7 @@
 const express = require("express");
 const routes = express.Router();
 const authRoutes = require("../controller/auth");
-const { verifyUsers,verifyTokenAndAdmin,verificationToken } = require("../middleware/verifications");
+const { verifyUsers,verifyTokenAndAdmin,verificationToken,login_verify } = require("../middleware/verifications");
 
 // registration route -----------------------------------
 
@@ -21,5 +21,8 @@ routes.put("/forgot-password", verifyUsers, authRoutes.forgetPassword);
 // reset-password ---------------------------------------
 
 routes.put("/reset-password", verificationToken, authRoutes.resetPassword);
+
+// change password ---------------------------------------
+routes.put('/change-password',login_verify,authRoutes.changePassword);
 
 module.exports = routes;
